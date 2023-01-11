@@ -42,7 +42,7 @@ def create_todo_data(request):
 
 @todo.errorhandler(404)
 def not_found(error):
-    return make_response(jsonify({'error': 'Not found'}), 404)
+    return make_response(jsonify({'error': 'Resource not found'}), 404)
 
 
 @todo.route("/", methods=["GET"])
