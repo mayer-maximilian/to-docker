@@ -7,7 +7,7 @@ from api.database import database as db
 app = create_app()
 migrate = Migrate(app, db)
 
-@app.cli.command("create-database")
+@app.cli.command("recreate-database")
 def recreate_database():
     db.drop_all()
     db.create_all()
