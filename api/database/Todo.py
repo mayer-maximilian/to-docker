@@ -19,6 +19,15 @@ class Todo(db.Model):
         self.deadline    = deadline
         self.done        = done
 
+    def to_dict(self):
+        return {
+            "id":          self.id,
+            "title":       self.title,
+            "description": self.description,
+            "deadling":    self.deadline,
+            "done":        "true" if self.done else "false"
+        }
+
     def __repr__(self) -> str:
         return f"<Todo {self.title}>"
 

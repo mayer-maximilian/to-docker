@@ -1,42 +1,27 @@
 # inspired by https://blog.miguelgrinberg.com/post/designing-a-restful-api-with-python-and-flask
 
 from flask import Blueprint, request, jsonify, abort, make_response
+from api.database import Todo, database as db
+from api.utils import generate_response, generate_list_response
 
 todo = Blueprint("todo", __name__)
 
-resources = [
-    {
-        "id": 1,
-        "title": "Buy Milk",
-        "description": "Go to the store and by some milk",
-        "deadline": "today",
-        "status": "open"
-    },
-    {
-        "id": 2,
-        "title": "Clean Kitchen",
-        "description": "Go to the store and by some milk",
-        "deadline": "tomorrow",
-        "status": "open"
-    }
-]
 
-def create_todo_data(request):
+def create_todo_entry(request):
 
     json = request.json
 
     if not json or not "title" in json:
         return None
 
-    todo = {
-        "id": resources[-1]["id"] + 1,
-        "title": json["title"],
-        "description": json.get("description", ""),
-        "deadline": json.get("deadline", None),
-        "status": "open"
-    }
+    todo = Todo(json["title"], 
+                json.get("description", ""), 
+                json.get("deadline", None), 
+                json.get("done", "false") == "true")
 
-    resources.append(todo)
+    db.session.add(todo)
+    db.session.commit()
+
     return todo
 
 
@@ -47,55 +32,58 @@ def not_found(error):
 
 @todo.route("/", methods=["GET"])
 def get_todos():
-    return jsonify({"todos": resources})
+    todos = Todo.query.all()
+    return generate_list_response("todos", todos)
 
 
 @todo.route("<int:todo_id>", methods=["GET"])
 def get_todo(todo_id):
-    try:
-        todo = next(todo for todo in resources if todo["id"] == todo_id)
-    except:
-        abort(404)
-        
-    return jsonify({"todo": todo})
+    todo = Todo.query.filter_by(id=todo_id).one_or_none()
+    if not todo: abort(404)
+    return generate_response("todo", todo)
 
 
 @todo.route("/", methods=["POST"])
 def create_todo():
-    todo = create_todo_data(request)
+    todo = create_todo_entry(request)
     if not todo: abort(404)
-    return jsonify({"todo": todo}), 201
+    return generate_response("todo", todo), 201
 
 
 @todo.route("<int:todo_id>", methods=["PUT"])
 def update_todo(todo_id):
 
     json = request.json
-
     if not json: abort(404)
 
-    try:
-        todo = next(todo for todo in resources if todo["id"] == todo_id)
+    todo = Todo.query.filter_by(id=todo_id).one_or_none()
 
-        def update_attribute(attribute_name):
-            todo[attribute_name] = json.get(attribute_name, todo[attribute_name])
+    if todo:
+        try:
+            
+            todo.title = json.get("title", todo.title)
+            todo.description = json.get("description", todo.description)
+            todo.deadline = json.get("deadline", todo.deadline)
+            todo.done = json.get("done", todo.done) == "true"
 
-        update_attribute("title")
-        update_attribute("description")
-        update_attribute("deadline")
-        update_attribute("status")
-    except:
-        todo = create_todo_data(request)
+            db.session.commit()
+
+        except Exception as e:
+            print(e)
+            abort(404)
+    else:
+        todo = create_todo_entry(request)
         if not todo: abort(404)
 
-    return jsonify({"todo": todo})
+    return generate_response("todo", todo)
 
 
 @todo.route("<int:todo_id>", methods=["DELETE"])
 def delete_todo(todo_id):
-    try:
-        todo = next(todo for todo in resources if todo["id"] == todo_id)
-    except:
-        abort(404)
-    resources.remove(todo)
-    return jsonify({'result': True})
+    todo = Todo.query.filter_by(id=todo_id).one_or_none()
+    if not todo: abort(404)
+
+    db.session.delete(todo)
+    db.session.commit()
+
+    return generate_response("todo", todo)
