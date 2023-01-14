@@ -2,3 +2,14 @@ flask==2.2.2
 flask_sqlalchemy==3.0.2
 flask-migrate==4.0.1
 psycopg2-binary==2.9.5
+fastapi==0.89.1
+passlib[bcrypt]==1.7.4
+python-jose[cryptography]==3.3.0
+jose==1.0.0
+pydantic~=1.10.4
+uvicorn~=0.20.0
+redis~=4.4.2
+SQLAlchemy~=1.4.46
+tzdata==2022.7
+pytz==2022.7
+python-multipart==0.0.5

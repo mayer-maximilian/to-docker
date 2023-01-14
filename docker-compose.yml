@@ -1,19 +1,15 @@
 version: "3.9"
 
 services:
-
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
   postgres:
     image: postgres:15.1
-    container_name: postgres_container
     ports:
-      - "5432:5432"
-    volumes:
-      - postgres_volume:/var/lib/postgresql/data
-
+      - 5432:5432
     environment:
-      POSTGRES_DB: todo_db
-      POSTGRES_USER: todo_user
-      POSTGRES_PASSWORD: todo_password
-
-volumes:
-  postgres_volume:
+      POSTGRES_USER: local
+      POSTGRES_PASSWORD: local
+      POSTGRES_DB: software-containerization
