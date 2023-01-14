@@ -39,7 +39,7 @@ def generate_password(generated_pw_length: int):
     return password
 
 
-def set_user():
+def set_user(username=None):
     """
         Ask user for input to create a new, or update an user with API access.
         The user is saved in the MongoDB 'auth' collection and has direct access
@@ -48,52 +48,57 @@ def set_user():
         :return: dictionary with userdata
     """
     with Session() as session:
-        print('Please provide the user data')
-        username = input('Username: ')
-        overwrite = 'n'
+        if username is None: 
+            print('Please provide the user data')
+            username = input('Username: ')
 
-        while find_user(session, username) is not None and overwrite.lower() == 'n':
-            overwrite = input('Username exists, would you like to override? [y/n]: ')
-            if overwrite.lower() == 'n':
-                username = input('Enter another username: ')
+            overwrite = 'n'
+
+            while find_user(session, username) is not None and overwrite.lower() == 'n':
+                overwrite = input('Username exists, would you like to override? [y/n]: ')
+                if overwrite.lower() == 'n':
+                    username = input('Enter another username: ')
 
         return {'username': username}
 
-def set_password():
+def set_password(password=None):
     """
         Ask for a (new) password for the user. The password is checked against
         basic rules and returned in hashed format.
 
         :return: hash of password
     """
-    password = input('Password: ')
+    if password is None: 
+        password = input('Password: ')
 
-    if password and password.strip():
-        if not is_password_valid(password):
-            print('Password needs to be at least 20 characters and contain a lowercase, uppercase and special '
-                  'character. Please try again or leave empty to generate a password.')
-            set_password()
+        if password and password.strip():
+            if not is_password_valid(password):
+                print('Password needs to be at least 20 characters and contain a lowercase, uppercase and special '
+                    'character. Please try again or leave empty to generate a password.')
+                return set_password()
 
-        password_check = input('Password (again): ')
+            password_check = input('Password (again): ')
 
-        if password != password_check:
-            print('Passwords do not match, please try again')
-            set_password()
-    else:
-        # Nothing entered. Generate password
-        password = generate_password(20)
-        while not is_password_valid(password):
+            if password != password_check:
+                print('Passwords do not match, please try again')
+                return set_password()
+        else:
+            # Nothing entered. Generate password
             password = generate_password(20)
+            while not is_password_valid(password):
+                password = generate_password(20)
 
-        print(f"No password given. Generated password:\n{password}\n"
-              f"Please store the password somewhere safe. You won't be able to retrieve it later.")
+            print(f"No password given. Generated password:\n{password}\n"
+                f"Please store the password somewhere safe. You won't be able to retrieve it later.")
 
     return pwd_context.hash(password)
 
-
-if __name__ == '__main__':
+def create_user(username=None, password=None):
     with Session() as session:
-        user = set_user()
-        user['hashed_password'] = set_password()
+        user = set_user(username)
+        user['hashed_password'] = set_password(password)
         add_user(session, **user)
         print('User created!')
+
+if __name__ == '__main__':
+    create_user('test', 'test')

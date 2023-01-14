@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
-from authentication import get_current_active_user as auth_required
+from .authentication import get_current_active_user as auth_required
 from database import Session
-from database.todo import list_todos, find_todo, create_todo_entry
+from database.todo import TodoModel, list_todos, find_todo, create_todo_entry
 
-router = APIRouter()
+router = APIRouter(prefix="/api")
 
 
 @router.get("/", dependencies=[Depends(auth_required)], status_code=200)
@@ -19,15 +19,12 @@ def get_todo(todo_id):
         todo = find_todo(session, todo_id)
         if not todo:
             raise HTTPException(status_code=404, detail="Item not found")
-
         return todo
-
 
 @router.post("/")
-def create_todo():
+def create_todo(todo: TodoModel):
     with Session() as session:
-        todo = create_todo_entry(session, request)  # use model/body from FastApi
-        return todo
+        return todo.to_database(session)
 
 
 @router.put("/{todo_id}")

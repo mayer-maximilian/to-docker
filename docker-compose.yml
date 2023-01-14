@@ -2,14 +2,29 @@ version: "3.9"
 
 services:
   redis:
-    image: redis
+    image: redis:7.0.7
+    container_name: redis
     ports:
       - 6379:6379
+    networks:
+      - backend
   postgres:
     image: postgres:15.1
+    container_name: postgres_db
     ports:
       - 5432:5432
     environment:
       POSTGRES_USER: local
       POSTGRES_PASSWORD: local
       POSTGRES_DB: software-containerization
+    networks:
+      - backend
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+networks:
+  backend:
+    external: true
+
+volumes:
+  pgdata:

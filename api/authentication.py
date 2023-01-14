@@ -105,7 +105,7 @@ def get_user(username: str):
         :return: user if exists in the database
     """
     with db.Session() as session:
-        user = db.users.find_user(session, username)
+        user = db.user.find_user(session, username)
         if user:
             return UserInDB(**user)
 

@@ -1,6 +1,7 @@
 from fastapi import HTTPException
 from sqlalchemy import Column, String, Integer, Boolean
 
+from pydantic import BaseModel
 from database.database import Base
 
 
@@ -9,6 +10,24 @@ class UserNotFoundException(HTTPException):
     def __init__(self, message='User not found'):
         super().__init__(status_code=404, detail=message)
 
+
+class TodoModel(BaseModel):
+
+    title: str
+    description: str = None
+    deadline: str = None
+    done: bool = False
+
+    def to_database(self, session):
+        todo = Todo(title       = self.title,
+                    description = self.description,
+                    deadline    = self.deadline,
+                    done        = self.done)
+
+        session.add(todo)
+        session.commit()
+
+        return todo.__dict__
 
 class Todo(Base):
     """ORM class for the todos"""

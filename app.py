@@ -1,12 +1,17 @@
-import os
 import uvicorn
 from api.authentication import router as auth_router
+from api.api import router as api_rounter
 from database.database import init_database
+from database.utils import getenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sys import platform
 
-ENV = os.getenv('ENV', 'local')
+# hacky fix?
+import nest_asyncio
+nest_asyncio.apply()
+
+ENV = getenv('ENV', 'local')
 app = None
 
 
@@ -15,9 +20,10 @@ def init_app():
                   description='Foobar',
                   docs_url='/api/docs',
                   openapi_url="/api/openapi.json",
-                  debug=False if ENV == 'production' else True)
+                  debug=ENV != 'production')
 
     app.include_router(auth_router, tags=['OAuth2.0'])
+    app.include_router(api_rounter, tags=["Todos API"])
     app.add_middleware(CORSMiddleware,
                        allow_origins=['*'],
                        allow_credentials=True,
@@ -30,8 +36,10 @@ def init_app():
 
 
 if platform != 'win32' or __name__ == "__main__":
-    print(f"Starting up app at port {os.getenv('EXPOSE_PORT', 5008)}...")
+    port = getenv('EXPOSE_PORT', 5008)
+
+    print(f"Starting up app at port {port}...")
     app = init_app()
 
     print("App initialized")
-    uvicorn.run(app, host='0.0.0.0', port=os.getenv('EXPOSE_PORT', 5008))
+    uvicorn.run(app, host='0.0.0.0', port=port)

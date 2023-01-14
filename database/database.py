@@ -1,12 +1,12 @@
-import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 from urllib.parse import quote_plus
+from .utils import getenv
 
-ENV = os.getenv('ENV', 'local')
-POSTGRES_HOST = os.getenv('POSTGRES_HOST', 'localhost')
-POSTGRES_USERNAME = os.getenv('POSTGRES_USERNAME', 'local')
-POSTGRES_PASSWORD = os.getenv('POSTGRES_PASSWORD', 'local')
+ENV = getenv('ENV', 'local')
+POSTGRES_HOST = getenv('POSTGRES_HOST', 'postgres_db')
+POSTGRES_USERNAME = getenv('POSTGRES_USERNAME', 'local')
+POSTGRES_PASSWORD = getenv('POSTGRES_PASSWORD', 'local')
 
 Base = declarative_base()
 
