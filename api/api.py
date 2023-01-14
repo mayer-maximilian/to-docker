@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from .authentication import get_current_active_user as auth_required
 from database import Session
-from database.todo import TodoModel, list_todos, find_todo, create_todo_entry
+from database.todo import TodoModel, search_todo, list_todos, find_todo
 
 router = APIRouter(prefix="/api")
 
@@ -12,9 +12,8 @@ def get_todos():
         todos = list_todos(session)
         return todos
 
-
 @router.get("/{todo_id}")
-def get_todo(todo_id):
+def get_todo(todo_id: int):
     with Session() as session:
         todo = find_todo(session, todo_id)
         if not todo:
@@ -23,53 +22,34 @@ def get_todo(todo_id):
 
 @router.post("/")
 def create_todo(todo: TodoModel):
+    # TODO: Return is empty, as Todo object is cleared after it is added to database
     with Session() as session:
         return todo.to_database(session)
 
-
 @router.put("/{todo_id}")
-def update_todo(todo_id):
-    json = request.json
-    if not json: abort(404)
+def update_todo(todo_id: int, todo_update: TodoModel):
+    with Session() as session:
+        todo = search_todo(session, todo_id)
+        if not todo:
+            raise HTTPException(status_code=404, detail="Item not found")
 
-    todo = Todo.query.filter_by(id=todo_id).one_or_none()
+        if todo_update.title:       todo.title       = todo_update.title
+        if todo_update.description: todo.description = todo_update.description
+        if todo_update.deadline:    todo.deadline    = todo_update.deadline
+        if todo_update.done:        todo.done        = todo_update.done
 
-    if todo:
-        try:
+        session.commit()
 
-            todo.title = json.get("title", todo.title)
-            todo.description = json.get("description", todo.description)
-            todo.deadline = json.get("deadline", todo.deadline)
-            todo.done = json.get("done", todo.done) == "true"
-
-            db.session.commit()
-
-        except Exception as e:
-            print(e)
-            abort(404)
-    else:
-        todo = create_todo_entry(request)
-        if not todo: abort(404)
-
-    return generate_response("todo", todo)
-
+        return find_todo(session, todo_id)
 
 @router.delete("/{todo_id}")
 def delete_todo(todo_id):
-    todo = Todo.query.filter_by(id=todo_id).one_or_none()
-    if not todo: abort(404)
+    with Session() as session:
+        todo = search_todo(session, todo_id)
+        if not todo:
+            raise HTTPException(status_code=404, detail="Item not found")
+        
+        session.delete(todo)
+        session.commit()
 
-    db.session.delete(todo)
-    db.session.commit()
-
-    return generate_response("todo", todo)
-
-
-@router.get('/hello_world', dependencies=[Depends(auth_required)], status_code=200)
-def hello_world() -> dict:
-    """
-        Generic hello world function. TODO: make useful
-
-        :return: status message
-    """
-    return {"message": "Hello world"}
+        return todo.__dict__
