@@ -1,11 +1,12 @@
 import json
-import os
 import redis
 from datetime import datetime, timezone
+from database.utils import getenv
 
-REDIS_HOST = os.getenv('REDIS_HOST', 'localhost')
+REDIS_HOST = getenv('REDIS_HOST', 'redis')
+REDIS_PORT = getenv('REDIS_PORT', "6379")
 
-token_blacklist = redis.Redis(host=REDIS_HOST, port=6379, db=1)
+token_blacklist = redis.Redis(host=REDIS_HOST, port=int(REDIS_PORT), db=1)
 
 
 def invalidate_jwt_token(token, exp):
