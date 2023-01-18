@@ -9,6 +9,7 @@ from zoneinfo import ZoneInfo
 
 import database as db
 from cache import invalidate_jwt_token, get_jwt_token
+from passwords import verify_password
 
 SECRET_KEY = 'foobar'  # TODO: store in K8S secret and fetch with os.getenv('SECRET_KEY')
 LOCALTIME = ZoneInfo('Europe/Amsterdam')
@@ -75,26 +76,6 @@ def time_to_int(time_obj):
     """
     int_time = int(time_obj.microsecond / 1000) + int(time_obj.timestamp()) * 1000
     return int_time
-
-
-def verify_password(plain_password, hashed_password):
-    """
-        Verify a password.
-
-        :param plain_password: the plain, unhashed password
-        :param hashed_password: the hashed password
-    """
-    return pwd_context.verify(plain_password, hashed_password)
-
-
-def get_password_hash(password):
-    """
-        Hash a password.
-
-        :param password: the plain, unhashed password
-        :return: the hashed password
-    """
-    return pwd_context.hash(password)
 
 
 def get_user(username: str):

@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from authentication import get_current_active_user as auth_required
+from api.authentication import get_current_active_user as auth_required
 from database import Session
 from database.todo import list_todos, find_todo, create_todo_entry
 

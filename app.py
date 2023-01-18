@@ -1,3 +1,4 @@
+import importlib
 import os
 import uvicorn
 from api.authentication import router as auth_router
@@ -18,6 +19,12 @@ def init_app():
                   debug=False if ENV == 'production' else True)
 
     app.include_router(auth_router, tags=['OAuth2.0'])
+    api = importlib.import_module(f'api.api')
+    user_api = importlib.import_module(f'api.users')
+
+    app.include_router(api.router, tags=[f'Api'], prefix=f'/api')
+    app.include_router(user_api.router, tags=[f'Users'], prefix=f'/users')
+
     app.add_middleware(CORSMiddleware,
                        allow_origins=['*'],
                        allow_credentials=True,

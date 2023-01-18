@@ -4,7 +4,7 @@ import string
 from passlib.context import CryptContext
 
 from database import Session
-from database.user import add_user, find_user
+from database.users import add_user, find_user
 
 pwd_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 

@@ -2,6 +2,7 @@ from fastapi import HTTPException
 from sqlalchemy import Column, String, Integer, Boolean
 
 from database.database import Base
+from passwords import get_password_hash
 
 
 class UserNotFoundException(HTTPException):
@@ -66,6 +67,32 @@ def find_user(session, username):
     """
     user = session.query(User).filter(User.username==username).one_or_none()
     return user.__dict__ if user else None
+
+
+def find_db_user(session, username):
+    """
+        Find a user in the database
+
+        :param session: A session object to interact with the database
+        :param username: The username of the user to find
+        :return: The user that has the given username
+    """
+    return session.query(User).filter(User.username == username).one_or_none()
+
+
+def change_password(session, username, password):
+    """
+        Change the password of a user
+
+        :param session: A session object to interact with the database
+        :param username: The username of the user whose passwords needs to be changed
+        :param password: The new password
+    """
+    user = session.query(User).filter(User.username==username).one_or_none()
+    if not user:
+        raise UserNotFoundException
+    user.hashed_password = get_password_hash(password)
+    session.commit()
 
 
 def delete_user(session, username):

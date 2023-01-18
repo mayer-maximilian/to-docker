@@ -1,0 +1,1 @@
+from api.authentication import get_current_active_user as auth_required
