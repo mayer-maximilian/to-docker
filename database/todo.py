@@ -12,7 +12,6 @@ class UserNotFoundException(HTTPException):
 
 
 class TodoModel(BaseModel):
-
     title: str
     description: str = None
     deadline: str = None

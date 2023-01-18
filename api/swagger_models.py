@@ -46,4 +46,3 @@ class UpdateUserSchema(BaseModel):
                 "disabled": False
             }
         }
-
