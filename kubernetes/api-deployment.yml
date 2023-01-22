@@ -17,5 +17,6 @@ spec:
       containers:
       - name: todo-api-container
         image: lucassctestregistry.azurecr.io/todo-api-image:v1
+        # imagePullPolicy: Always
         ports:
         - containerPort: 5008

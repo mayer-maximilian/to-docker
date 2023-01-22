@@ -19,7 +19,7 @@ spec:
   type: ClusterIP
   ports:
   - protocol: TCP
-    port: 8080
+    port: 80
     targetPort: 5008
   selector:
     app: todo-api
@@ -32,7 +32,7 @@ spec:
   type: ClusterIP
   ports:
   - protocol: TCP
-    port: 8080         # port for the service
+    port: 5432         # port for the service
     targetPort: 5432   # port on the pod
   selector:
     app: todo-database
@@ -45,7 +45,7 @@ spec:
   type: ClusterIP
   ports:
   - protocol: TCP
-    port: 8080         # port for the service
+    port: 6379         # port for the service
     targetPort: 6379   # port on the pod
   selector:
     app: todo-redis
