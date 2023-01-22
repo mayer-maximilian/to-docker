@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-redis-deployment
+  labels:
+    app: todo-redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo-redis
+  template:
+    metadata:
+      labels:
+        app: todo-redis
+    spec:
+      containers:
+      - name: todo-redis-container
+        image: redis:7.0.7
+        ports:
+        - containerPort: 6379

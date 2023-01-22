@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: todo-database-config
+data:
+  POSTGRES_DB: software-containerization
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: todo-database-secret
+type: Opaque
+data:
+  POSTGRES_USER: bG9jYWwK      # local
+  POSTGRES_PASSWORD: bG9jYWwK  # local

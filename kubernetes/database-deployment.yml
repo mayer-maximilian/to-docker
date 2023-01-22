@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-database-deployment
+  labels:
+    app: todo-database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo-database
+  template:
+    metadata:
+      labels: 
+        app: todo-database
+    spec:
+      containers:
+      - name: todo-database-container
+        image: postgres:14.6
+        ports:
+        - containerPort: 5432
+        env:
+          - name: POSTGRES_DB
+            valueFrom:
+              configMapKeyRef:
+                name: todo-database-config
+                key: POSTGRES_DB
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: todo-database-secret
+                key: POSTGRES_USER
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: todo-database-secret
+                key: POSTGRES_PASSWORD
+        volumeMounts:
+          - name: todo-database-data
+            mountPath: /var/lib/postgresql/data
+      volumes:
+      - name: todo-database-data
+        persistentVolumeClaim:
+          claimName: todo-database-pvc

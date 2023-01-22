@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo-frontend-service
+spec:
+  type: ClusterIP
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  selector:
+    app: todo-frontend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo-api-service
+spec:
+  type: ClusterIP
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 5008
+  selector:
+    app: todo-api
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo-database-service
+spec:
+  type: ClusterIP
+  ports:
+  - protocol: TCP
+    port: 8080         # port for the service
+    targetPort: 5432   # port on the pod
+  selector:
+    app: todo-database
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo-redis-service
+spec:
+  type: ClusterIP
+  ports:
+  - protocol: TCP
+    port: 8080         # port for the service
+    targetPort: 6379   # port on the pod
+  selector:
+    app: todo-redis
