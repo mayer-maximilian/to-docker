@@ -3,8 +3,8 @@ import redis
 from datetime import datetime, timezone
 from database.utils import getenv
 
-REDIS_HOST = getenv('REDIS_HOST', 'redis')
-REDIS_PORT = getenv('REDIS_PORT', '6379')
+REDIS_HOST = getenv('REDIS_HOST', 'todo-redis-service')
+REDIS_PORT = getenv('REDIS_PORT', '8080')
 
 token_blacklist = redis.Redis(host=REDIS_HOST, port=int(REDIS_PORT), db=1)
 

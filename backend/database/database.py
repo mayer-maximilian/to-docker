@@ -4,7 +4,7 @@ from urllib.parse import quote_plus
 from .utils import getenv
 
 ENV = getenv('ENV', 'local')
-POSTGRES_HOST = getenv('POSTGRES_HOST', 'postgres_db')
+POSTGRES_HOST = getenv('POSTGRES_HOST', 'todo-database-service')
 POSTGRES_USERNAME = getenv('POSTGRES_USERNAME', 'local')
 POSTGRES_PASSWORD = getenv('POSTGRES_PASSWORD', 'local')
 

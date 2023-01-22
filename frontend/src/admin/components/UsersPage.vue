@@ -156,7 +156,7 @@ export default {
         getUsers () {
             let jwt_token = getCookie("jwt")
             if (jwt_token) {
-                axios.get(`${!getEnv('ENV') ? 'http://localhost:5008' : ''}/users/get-users`, {'headers': {'Authorization': `bearer ${jwt_token}`}})
+                axios.get(`${!getEnv('ENV') ? 'http://todo-api-service:8080' : ''}/users/get-users`, {'headers': {'Authorization': `bearer ${jwt_token}`}})
                 .then((response) => {
                     this.users = response.data.users
                 })
@@ -176,7 +176,7 @@ export default {
         },
         editItem () {
             let jwt_token = getCookie("jwt")
-            axios.post(`${!getEnv('ENV') ? 'http://localhost:5008' : ''}/users/update-user`, this.editing_user, {'headers': {'Authorization': `bearer ${jwt_token}`}})
+            axios.post(`${!getEnv('ENV') ? 'http://todo-api-service:8080' : ''}/users/update-user`, this.editing_user, {'headers': {'Authorization': `bearer ${jwt_token}`}})
             .then(() => {
                 this.getUsers()
                 this.onReset()
@@ -192,7 +192,7 @@ export default {
             let data = new FormData()
             data.append('username', this.editing_user.username)
             data.append('password', this.editing_user.new_password)
-            axios.post(`${!getEnv('ENV') ? 'http://localhost:5008' : ''}/users/change-password`, data, {'headers': {'Authorization': `bearer ${jwt_token}`}})
+            axios.post(`${!getEnv('ENV') ? 'http://todo-api-service:8080' : ''}/users/change-password`, data, {'headers': {'Authorization': `bearer ${jwt_token}`}})
             .then(() => {
                 if (current_user === this.editing_user.username) {
                     userLogOff()
@@ -205,7 +205,7 @@ export default {
         },
         submitNewUser () {
             let jwt_token = getCookie("jwt")
-            axios.post(`${!getEnv('ENV') ? 'http://localhost:5008' : ''}/users/add-user`, this.adding_user, {'headers': {'Authorization': `bearer ${jwt_token}`}})
+            axios.post(`${!getEnv('ENV') ? 'http://todo-api-service:8080' : ''}/users/add-user`, this.adding_user, {'headers': {'Authorization': `bearer ${jwt_token}`}})
             .then(() => {
                 this.getUsers()
                 this.onReset()
@@ -213,7 +213,7 @@ export default {
         },
         deleteUser () {
             let jwt_token = getCookie("jwt")
-            axios.post(`${!getEnv('ENV') ? 'http://localhost:5008' : ''}/users/delete-user?username=${this.editing_user.username}`, {}, {'headers': {'Authorization': `bearer ${jwt_token}`}})
+            axios.post(`${!getEnv('ENV') ? 'http://todo-api-service:8080' : ''}/users/delete-user?username=${this.editing_user.username}`, {}, {'headers': {'Authorization': `bearer ${jwt_token}`}})
             .then(() => {
                 this.getUsers()
                 this.onReset()
