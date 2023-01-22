@@ -28,7 +28,7 @@ def init_app():
     user_api = importlib.import_module(f'api.users')
 
     app.include_router(api.router, tags=['Todos API'], prefix=f'/api')
-    app.include_router(user_api.router, tags=['Users'], prefix=f'/users')
+    app.include_router(user_api.router, tags=['Users API'], prefix=f'/users')
 
     app.add_middleware(CORSMiddleware,
                        allow_origins=['*'],

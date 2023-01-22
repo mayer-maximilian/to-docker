@@ -1,5 +1,6 @@
 #! /bin/sh
 
+# microk8s kubectl delete service todo-web-service
 microk8s kubectl delete ingress todo-ingress
 microk8s kubectl delete deployment todo-frontend-deployment
 

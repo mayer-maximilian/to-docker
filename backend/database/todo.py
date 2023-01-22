@@ -46,7 +46,6 @@ def list_todos(session):
     todos = session.query(Todo).all()
     return [todo.__dict__ for todo in todos]
 
-
 def find_todo(session, todo_id):
     todo = search_todo(session, todo_id)
     return todo.__dict__ if todo else None

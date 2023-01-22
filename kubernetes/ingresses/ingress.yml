@@ -1,3 +1,4 @@
+# Azure Setup: https://kubernetes.github.io/ingress-nginx/deploy/#cloud-deployments
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -15,3 +16,4 @@ spec:
               name: todo-frontend-service
               port:
                 number: 80
+  ingressClassName: nginx
