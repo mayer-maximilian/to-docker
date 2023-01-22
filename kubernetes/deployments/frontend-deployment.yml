@@ -17,5 +17,6 @@ spec:
       containers:
       - name: todo-frontend-container
         image: lucassctestregistry.azurecr.io/todo-frontend-image:v1
+        # imagePullPolicy: Always
         ports:
         - containerPort: 80

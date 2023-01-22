@@ -1,4 +1,5 @@
 # Azure Setup: https://kubernetes.github.io/ingress-nginx/deploy/#cloud-deployments
+# Command: kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.5.1/deploy/static/provider/cloud/deploy.yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -14,6 +15,15 @@ spec:
           backend:
             service:
               name: todo-frontend-service
+              port:
+                number: 80
+  - http:
+      paths:
+        - path: /api
+          pathType: Prefix
+          backend:
+            service:
+              name: todo-api-service
               port:
                 number: 80
   ingressClassName: nginx

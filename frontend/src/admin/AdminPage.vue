@@ -27,7 +27,7 @@ export default {
             return
         }
         axios.get(
-            `${!getEnv('ENV') ? 'http://todo-api-service:8080' : ''}/check-login`,
+            `${!getEnv('ENV') ? 'http://todo-api-service' : ''}/check-login`,
             {'headers': {'Authorization': `bearer ${jwt_token}`}}
         )
         .then((response) => {
