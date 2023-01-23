@@ -5,8 +5,11 @@ from .utils import getenv
 
 ENV = getenv('ENV', 'local')
 POSTGRES_HOST = getenv('POSTGRES_HOST', 'todo-database-service')
-POSTGRES_USERNAME = getenv('POSTGRES_USERNAME', 'local')
+POSTGRES_USERNAME = getenv('POSTGRES_USERNAME', 'postgres')
 POSTGRES_PASSWORD = getenv('POSTGRES_PASSWORD', 'local')
+
+print(f"postgresql://{POSTGRES_USERNAME}:{quote_plus(POSTGRES_PASSWORD)}@"
+      f"{POSTGRES_HOST}/software-containerization{'?sslmode=require' if ENV != 'local' else ''}")
 
 Base = declarative_base()
 

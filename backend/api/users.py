@@ -11,6 +11,18 @@ from passwords import get_password_hash
 router = APIRouter()
 
 
+@router.post('/register', status_code=202)
+def register(user: AddUserSchema):
+    """Add a user to the database"""
+    with Session() as session:
+        add_user(
+            session,
+            username=user.username,
+            hashed_password=get_password_hash(user.password),
+            disabled=user.disabled
+        )
+
+
 @router.get('/get-users', dependencies=[Depends(auth_required)], status_code=200)
 def get_users():
     """Get all the users, no matter whether they are active or not"""

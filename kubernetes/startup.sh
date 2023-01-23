@@ -18,6 +18,4 @@ microk8s kubectl apply -f ./deployments/api-deployment.yml
 microk8s kubectl apply -f ./deployments/frontend-deployment.yml
 microk8s kubectl apply -f ./ingresses/ingress.yml
 
-#microk8s kubectl apply -f ./services/nodeport.yml
-
 # microk8s kubectl get pods

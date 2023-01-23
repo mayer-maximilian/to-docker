@@ -3,6 +3,7 @@ kind: ConfigMap
 metadata:
   name: todo-database-config
 data:
+  PGDATA: /var/lib/postgresql/data/todo-database/
   POSTGRES_DB: software-containerization
 ---
 apiVersion: v1

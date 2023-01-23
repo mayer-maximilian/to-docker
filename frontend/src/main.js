@@ -20,11 +20,13 @@ Vue.config.productionTip = false
 
 
 import Home from './App.vue'
+import Register from './admin/Register.vue'
 import Login from './admin/Login.vue'
 import AdminPage from './admin/AdminPage'
 
 const routes = [
   { path: '/', component: Home, name: 'home' },
+  { path: '/register', component: Register, name: 'register'},
   { path: '/login', component: Login, name: 'login' },
   { path: '/admin', component: AdminPage, name: 'admin'}
 ]

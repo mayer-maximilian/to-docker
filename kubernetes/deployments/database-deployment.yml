@@ -16,20 +16,25 @@ spec:
     spec:
       containers:
       - name: todo-database-container
-        image: postgres:14.6
+        image: postgres:15.1
         ports:
         - containerPort: 5432
         env:
+          - name: PGDATA
+            valueFrom:
+              configMapKeyRef:
+                name: todo-database-config
+                key: PGDATA
           - name: POSTGRES_DB
             valueFrom:
               configMapKeyRef:
                 name: todo-database-config
                 key: POSTGRES_DB
-          - name: POSTGRES_USER
-            valueFrom:
-              secretKeyRef:
-                name: todo-database-secret
-                key: POSTGRES_USER
+#          - name: POSTGRES_USER
+#            valueFrom:
+#              secretKeyRef:
+#                name: todo-database-secret
+#                key: POSTGRES_USER
           - name: POSTGRES_PASSWORD
             valueFrom:
               secretKeyRef:
@@ -37,7 +42,7 @@ spec:
                 key: POSTGRES_PASSWORD
         volumeMounts:
           - name: todo-database-data
-            mountPath: /var/lib/postgresql/data
+            mountPath: /var/lib/postgresql/data/
       volumes:
       - name: todo-database-data
         persistentVolumeClaim:

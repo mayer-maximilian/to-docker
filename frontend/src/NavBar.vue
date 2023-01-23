@@ -8,6 +8,7 @@
                 <b-button v-if=!this.user style="float:right" variant="light" @click="toPage('login')">Login</b-button>
                 <b-button v-else style="float:right" variant="light" @click="logOff()">Logout</b-button>
                 <b-button v-if=this.user style="float:right; margin-right: 1rem" variant="light" @click="$router.push({name: 'admin'})">Admin</b-button>
+                <b-button v-if=!this.user style="float:right; margin-right: 1rem" variant="light" @click="toPage('register')">Register</b-button>
             </b-col>
 
         </b-row>
