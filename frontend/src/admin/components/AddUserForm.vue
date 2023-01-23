@@ -62,11 +62,12 @@ export default {
             }
         },
         submitNewUser () {
-            axios.post(`${!getEnv('ENV') ? 'http://todo-api-service' : ''}/users/register`, this.user)
+            axios.post(`${!getEnv('ENV') ? 'http://20.31.14.128/api' : ''}/users/register`, this.user)
             .then((response) => {
-                let user = this.user
+                this.$emit('on-response', { response: response, 
+                                            username: this.user.username, 
+                                            password: this.user.password })
                 this.onReset()
-                this.$emit('on-response', response, user)
             })
         }
     }

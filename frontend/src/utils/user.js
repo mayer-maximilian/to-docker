@@ -22,7 +22,7 @@ export async function userLogIn(username, password) {
         'headers': {  "Content-Type": "multipart/form-data" }
     }
     let successful = true
-    await axios.post(`${!getEnv('ENV') ? 'http://todo-api-service' : ''}/authenticate`, data, headers)
+    await axios.post(`${!getEnv('ENV') ? 'http://20.31.14.128/api' : ''}/authenticate`, data, headers)
         .then((response) => {
             console.log('yay')
             setCookie("jwt", response.data.access_token)

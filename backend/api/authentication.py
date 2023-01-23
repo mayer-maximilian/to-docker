@@ -86,7 +86,7 @@ def get_user(username: str):
         :return: user if exists in the database
     """
     with db.Session() as session:
-        user = db.user.find_user(session, username)
+        user = db.users.find_user(session, username)
         if user:
             return UserInDB(**user)
 
@@ -99,6 +99,7 @@ def authenticate_user(username: str, password: str):
         :param password: the unhashed password of the user
     """
     user = get_user(username)
+    print(user)
     return user if user and verify_password(password, user.hashed_password) else False
 
 

@@ -19,16 +19,16 @@ app = None
 def init_app():
     app = FastAPI(title='Software Containerization',
                   description='Foobar',
-                  docs_url='/docs',
-                  openapi_url="/openapi.json",
+                  docs_url='/api/docs',
+                  openapi_url="/api/openapi.json",
                   debug=ENV != 'production')
 
-    app.include_router(auth_router, tags=['OAuth2.0'])
+    app.include_router(auth_router, tags=['OAuth2.0'], prefix=f'/api')
     api = importlib.import_module(f'api.api')
     user_api = importlib.import_module(f'api.users')
 
-    app.include_router(api.router, tags=['Todos API'], prefix=f'/todos')
-    app.include_router(user_api.router, tags=['Users API'], prefix=f'/users')
+    app.include_router(api.router, tags=['Todos API'], prefix=f'/api/todos')
+    app.include_router(user_api.router, tags=['Users API'], prefix=f'/api/users')
 
     app.add_middleware(CORSMiddleware,
                        allow_origins=['*'],

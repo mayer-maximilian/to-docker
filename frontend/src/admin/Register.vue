@@ -46,12 +46,12 @@ export default {
         }
     },
     methods: {
-        async onResponse(response, userForm) {
+        async onResponse({ response, username, password }) {
             if (response.status_code !== 202) {
                 this.failed_registration = this.failed_registration_max
             }
 
-            let successful = await userLogIn(userForm.username, userForm.form.password)
+            let successful = await userLogIn(username, password)
             console.log('successful', successful)
             if (successful) {
                 await this.$router.push({name: 'home'})
