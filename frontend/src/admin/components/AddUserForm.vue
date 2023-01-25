@@ -66,7 +66,14 @@ export default {
             .then((response) => {
                 this.$emit('on-response', { response: response, 
                                             username: this.user.username, 
-                                            password: this.user.password })
+                                            password: this.user.password,
+                                            error: null })
+                this.onReset()
+            }).catch((error) => {
+                this.$emit('on-response', { response: null, 
+                                            username: this.user.username, 
+                                            password: this.user.password,
+                                            error: error })
                 this.onReset()
             })
         }

@@ -46,18 +46,22 @@ export default {
         }
     },
     methods: {
-        async onResponse({ response, username, password }) {
-            if (response.status_code !== 202) {
-                this.failed_registration = this.failed_registration_max
+        async onResponse({ response, username, password, error }) {
+            if (error !== null || response.status !== 202) {
+                this.registrationFailed()
+                return
             }
 
             let successful = await userLogIn(username, password)
-            console.log('successful', successful)
+
             if (successful) {
                 await this.$router.push({name: 'home'})
             } else {
-                this.failed_registration = this.failed_registration_max
+                this.registrationFailed()
             }
+        },
+        registrationFailed() {
+            this.failed_registration = this.failed_registration_max
         },
         failedRegistrationUpdate(failed_registration) {
             this.failed_registration = failed_registration

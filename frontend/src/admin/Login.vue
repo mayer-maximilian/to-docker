@@ -52,10 +52,11 @@ export default {
     methods: {
         async onSubmit() {
             let successful = await userLogIn(this.form.username, this.form.password)
-            console.log('successful', successful)
             if (successful) {
                 await this.$router.push({name: 'home'})
             } else {
+                this.from.username = null
+                this.form.password = null
                 this.failed_login = this.failed_login_max
             }
         },

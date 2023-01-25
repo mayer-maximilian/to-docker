@@ -31,7 +31,8 @@ class AddUserSchema(BaseModel):
 
 class UpdateUserSchema(BaseModel):
     """Schema for the data necessary to update an existing user"""
-    username: str = Field(description="Username")
+    original_username: str = Field(description="Original Username")
+    username: str = Field(description="New Username")
     full_name: Optional[str] = Field(default=None, description='Full name')
     email: Optional[str] = Field(default=None, description='Email address')
     disabled: Optional[bool] = Field(default=False, description="Whether the user is disabled")
@@ -40,6 +41,7 @@ class UpdateUserSchema(BaseModel):
         """Example of what a featured result should look like."""
         schema_extra = {
             "example": {
+                "original_username": "test_old",
                 "username": "test123",
                 "full_name": "Foo Bar",
                 "email": "foobar@loremipsum.com",

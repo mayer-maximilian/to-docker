@@ -164,7 +164,8 @@ export default {
         },
         setEditingUser (item) {
             this.onReset()
-            this.editing_user = JSON.parse(JSON.stringify(item));
+            this.editing_user = JSON.parse(JSON.stringify(item))
+            this.editing_user.original_username = item.username
         },
         setAddingUser () {
             this.onReset()
@@ -178,8 +179,13 @@ export default {
             let jwt_token = getCookie("jwt")
             axios.post(`${!getEnv('ENV') ? 'http://20.31.14.128/api' : ''}/users/update-user`, this.editing_user, {'headers': {'Authorization': `bearer ${jwt_token}`}})
             .then(() => {
-                this.getUsers()
-                this.onReset()
+                if (this.editing_user.original_username !== this.editing_user.username) {
+                    userLogOff()
+                    this.$router.push({'name': 'login'})
+                } else {
+                    this.getUsers()
+                    this.onReset()
+                }
             })
         },
         onReset () {

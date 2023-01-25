@@ -99,7 +99,6 @@ def authenticate_user(username: str, password: str):
         :param password: the unhashed password of the user
     """
     user = get_user(username)
-    print(user)
     return user if user and verify_password(password, user.hashed_password) else False
 
 

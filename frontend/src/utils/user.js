@@ -5,6 +5,10 @@ import getEnv from '@/utils/env';
 import {eventBus} from '@/main';
 import {getCookie, setCookie, deleteCookie} from '@/utils/cookies';
 
+export function print(obj) {
+    console.log(obj)
+}
+
 export function getUser() {
     let jwt_token = getCookie("jwt")
     if (jwt_token) {

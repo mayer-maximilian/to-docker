@@ -31,7 +31,7 @@ export default {
             {'headers': {'Authorization': `bearer ${jwt_token}`}}
         )
         .then((response) => {
-            if (response.status_code === 401) {
+            if (response.status === 401) {
                 this.$router.push({'name': 'login'})
             }
         })
