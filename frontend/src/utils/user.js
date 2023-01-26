@@ -23,10 +23,10 @@ export async function userLogIn(username, password) {
     data.append('username', username)
     data.append('password', password)
     let headers = {
-        'headers': {  "Content-Type": "multipart/form-data" }
+        'headers': { "Content-Type": "multipart/form-data" }
     }
     let successful = true
-    await axios.post(`${!getEnv('ENV') ? 'http://20.31.14.128/api' : ''}/authenticate`, data, headers)
+    await axios.post(`${!getEnv('ENV') ? 'http://localhost:5008' : ''}/authenticate`, data, headers)
         .then((response) => {
             console.log('yay')
             setCookie("jwt", response.data.access_token)
@@ -37,7 +37,6 @@ export async function userLogIn(username, password) {
         })
     return successful
 }
-
 
 export function userLogOff() {
     if (getCookie("jwt")) {

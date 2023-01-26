@@ -26,8 +26,9 @@ export default {
             this.$router.push({'name': 'login'})
             return
         }
+        console.log(`${!getEnv('ENV') ? 'http://localhost:5008' : ''}/check-login`);
         axios.get(
-            `${!getEnv('ENV') ? 'http://20.31.14.128/api' : ''}/check-login`,
+            `${!getEnv('ENV') ? 'http://localhost:5008' : ''}/check-login`,
             {'headers': {'Authorization': `bearer ${jwt_token}`}}
         )
         .then((response) => {

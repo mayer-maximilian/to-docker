@@ -1,3 +1,4 @@
+import os
 from datetime import datetime, timedelta, timezone
 from fastapi import Depends, APIRouter, HTTPException
 from fastapi.security import HTTPBasic, OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -11,7 +12,9 @@ import database as db
 from cache import invalidate_jwt_token, get_jwt_token
 from passwords import verify_password
 
-SECRET_KEY = 'foobar'  # TODO: store in K8S secret and fetch with os.getenv('SECRET_KEY')
+
+ENV = os.getenv('ENV', 'local')
+SECRET_KEY = 'foobar' if ENV == 'local' else os.getenv('SECRET_KEY')
 LOCALTIME = ZoneInfo('Europe/Amsterdam')
 
 router = APIRouter()
