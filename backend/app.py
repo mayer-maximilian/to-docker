@@ -23,7 +23,7 @@ def init_app():
                   openapi_url="/api/openapi.json",
                   debug=ENV != 'production')
 
-    app.include_router(auth_router, tags=['OAuth2.0'], prefix=f'/api')
+    app.include_router(auth_router, tags=['OAuth2.0'])
     api = importlib.import_module(f'api.api')
     user_api = importlib.import_module(f'api.users')
 
