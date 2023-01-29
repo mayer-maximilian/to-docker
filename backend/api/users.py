@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 
 from api import auth_required
@@ -9,6 +9,37 @@ from passwords import get_password_hash
 
 
 router = APIRouter()
+
+
+class UserAlreadyExistException(HTTPException):
+    """The exception that is thrown when the requested user should not exist, but already does."""
+    def __init__(self, message='User already exists'):
+        super().__init__(status_code=401, detail=message)
+
+class UserDoesNotExistException(HTTPException):
+    """The exception that is thrown when the requested user does not exist."""
+    def __init__(self, message='User does not exist'):
+        super().__init__(status_code=401, detail=message)
+
+
+def add_new_user(user: AddUserSchema):
+    with Session() as session:
+
+        if find_db_user(session, user.username):
+            raise UserAlreadyExistException
+
+        add_user(
+            session,
+            username=user.username,
+            hashed_password=get_password_hash(user.password),
+            disabled=user.disabled
+        )
+
+
+@router.post('/register', status_code=202)
+def register(user: AddUserSchema):
+    """Add a user to the database"""
+    add_new_user(user)
 
 
 @router.get('/get-users', dependencies=[Depends(auth_required)], status_code=200)
@@ -32,13 +63,7 @@ def change_password_api(form_data: OAuth2PasswordRequestForm = Depends()):
 @router.post('/add-user', dependencies=[Depends(auth_required)], status_code=202)
 def post_user(user: AddUserSchema):
     """Add a user to the database"""
-    with Session() as session:
-        add_user(
-            session,
-            username=user.username,
-            hashed_password=get_password_hash(user.password),
-            disabled=user.disabled
-        )
+    add_new_user(user)
 
 
 @router.post('/delete-user', dependencies=[Depends(auth_required)], status_code=202)
@@ -52,9 +77,13 @@ def del_user(username):
 def update_user(user: UpdateUserSchema):
     """Update a user that is in the database"""
     with Session() as session:
-        db_user = find_db_user(session, user.username)
-        db_user.disabled=user.disabled
-        session.commit()
+        db_user = find_db_user(session, user.original_username)
+        if db_user: 
+            db_user.username = user.username
+            db_user.disabled = user.disabled
+            session.commit()
+        else:
+            raise UserDoesNotExistException
 
 
 @router.post('/enable-user', dependencies=[Depends(auth_required)], status_code=202)

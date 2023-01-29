@@ -1,2 +1,2 @@
-import database.users
+import database.users as users
 from database.database import Session
