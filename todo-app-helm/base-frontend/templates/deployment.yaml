@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "base-frontend.fullname" . }}-todo-frontend-deployment
+  labels:
+  {{- include "base-frontend.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.todoFrontendDeployment.replicas }}
+  selector:
+    matchLabels:
+      component: todo-frontend
+    {{- include "base-frontend.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        component: todo-frontend
+      {{- include "base-frontend.selectorLabels" . | nindent 8 }}
+    spec:
+      automountServiceAccountToken: false
+      containers:
+      - env:
+        - name: ENV
+          value: test
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ .Values.kubernetesClusterDomain }}
+        image: {{ .Values.todoFrontendDeployment.todoFrontendContainer.image.repository
+          }}:{{ .Values.todoFrontendDeployment.todoFrontendContainer.image.tag | default
+          .Chart.AppVersion }}
+        imagePullPolicy: Always
+        name: todo-frontend-container
+        ports:
+        - containerPort: 80
+        resources: {{- toYaml .Values.todoFrontendDeployment.todoFrontendContainer.resources
+          | nindent 10 }}
+        securityContext:
+          allowPrivilegeEscalation: false
+          privileged: false
+      nodeSelector:
+        type: application
+      tolerations:
+      - effect: NoSchedule
+        key: type
+        operator: Equal
+        value: application

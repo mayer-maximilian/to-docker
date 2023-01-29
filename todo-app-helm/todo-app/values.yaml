@@ -1,0 +1,86 @@
+# values.yaml
+kubernetesClusterDomain: cluster.local
+
+todo-frontend-1:
+  kubernetesClusterDomain: cluster.local
+  todoApiDeployment:
+    replicas: 1
+    todoApiContainer:
+      image:
+        repository: lucassctestregistry.azurecr.io/todo-api-image
+        tag: v1
+      resources:
+        limits:
+          cpu: 800m
+          memory: 3000Mi
+        requests:
+          cpu: 650m
+          memory: 2000Mi
+  todoApiService:
+    ports:
+    - port: 5008
+      targetPort: 5008
+    type: ClusterIP
+
+todo-database-1:
+  kubernetesClusterDomain: cluster.local
+  postgres:
+    ports:
+    - port: 5432
+      targetPort: 5432
+    postgres:
+      image:
+        repository: postgres
+        tag: "15.1"
+    replicas: 1
+    type: LoadBalancer
+  pvc:
+    postgresqlDataClaim:
+      storageClass: manual
+      storageRequest: 10Gi
+  todoDatabaseConfig:
+    pgdata: /var/lib/postgresql/data/todo-database/
+    postgresDb: software-containerization
+  todoDatabaseSecret:
+    postgresPassword: ""
+    postgresUser: ""
+
+todo-api-1:
+  kubernetesClusterDomain: cluster.local
+  todoFrontendDeployment:
+    replicas: 1
+    todoFrontendContainer:
+      image:
+        repository: lucassctestregistry.azurecr.io/todo-frontend-image
+        tag: v1
+      resources:
+        limits:
+          cpu: 100m
+          memory: 250Mi
+  todoFrontendService:
+    ports:
+    - port: 80
+      targetPort: 80
+    type: ClusterIP
+
+todo-redis-1:
+  deployment:
+    redisClient:
+      image:
+        repository: redis
+        tag: 7.0.7
+      resources:
+        limits:
+          cpu: 250m
+          memory: 500Mi
+        requests:
+          cpu: 100m
+          memory: 256Mi
+    replicas: 1
+  kubernetesClusterDomain: cluster.local
+  service:
+    ports:
+    - port: 6379
+      targetPort: 6379
+    type: ClusterIP
+

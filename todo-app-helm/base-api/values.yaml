@@ -1,0 +1,19 @@
+kubernetesClusterDomain: cluster.local
+todoApiDeployment:
+  replicas: 1
+  todoApiContainer:
+    image:
+      repository: lucassctestregistry.azurecr.io/todo-api-image
+      tag: v1
+    resources:
+      limits:
+        cpu: 800m
+        memory: 3000Mi
+      requests:
+        cpu: 650m
+        memory: 2000Mi
+todoApiService:
+  ports:
+  - port: 5008
+    targetPort: 5008
+  type: ClusterIP

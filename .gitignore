@@ -138,3 +138,8 @@ dmypy.json
 .pyre/
 
 frontend/node_modules
+
+# Other stuff
+*.tgz
+.DS_Store
+

@@ -1,0 +1,21 @@
+kubernetesClusterDomain: cluster.local
+postgres:
+  ports:
+  - port: 5432
+    targetPort: 5432
+  postgres:
+    image:
+      repository: postgres
+      tag: "15.1"
+  replicas: 1
+  type: LoadBalancer
+pvc:
+  postgresqlDataClaim:
+    storageClass: manual
+    storageRequest: 10Gi
+todoDatabaseConfig:
+  pgdata: /var/lib/postgresql/data/todo-database/
+  postgresDb: software-containerization
+todoDatabaseSecret:
+  postgresPassword: ""
+  postgresUser: ""

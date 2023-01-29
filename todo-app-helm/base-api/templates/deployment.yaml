@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "base-api.fullname" . }}-todo-api-deployment
+  labels:
+  {{- include "base-api.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.todoApiDeployment.replicas }}
+  selector:
+    matchLabels:
+      component: todo-api
+    {{- include "base-api.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        component: todo-api
+      {{- include "base-api.selectorLabels" . | nindent 8 }}
+    spec:
+      automountServiceAccountToken: false
+      containers:
+      - env:
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              key: auth_key
+              name: jwt-key
+        - name: REDIS_HOST
+          value: redis-service
+        - name: POSTGRES_HOST
+          valueFrom:
+            secretKeyRef:
+              key: host
+              name: postgres
+        - name: POSTGRES_USERNAME
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: postgres
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: postgres
+        - name: ENV
+          value: test
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ .Values.kubernetesClusterDomain }}
+        image: {{ .Values.todoApiDeployment.todoApiContainer.image.repository }}:{{ .Values.todoApiDeployment.todoApiContainer.image.tag
+          | default .Chart.AppVersion }}
+        imagePullPolicy: Always
+        name: todo-api-container
+        ports:
+        - containerPort: 5008
+        resources: {{- toYaml .Values.todoApiDeployment.todoApiContainer.resources | nindent
+          10 }}
+        securityContext:
+          allowPrivilegeEscalation: false
+          privileged: false
+      nodeSelector:
+        type: application
+      tolerations:
+      - effect: NoSchedule
+        key: type
+        operator: Equal
+        value: application
