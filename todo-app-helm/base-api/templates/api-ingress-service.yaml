@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "base-api.fullname" . }}-api-ingress-service
+  labels:
+  {{- include "base-api.labels" . | nindent 4 }}
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/limit-rps: "200"
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  rules:
+  - http:
+      paths:
+      - backend:
+          service:
+            name: '{{ include "base-api.fullname" . }}-todo-api-service'
+            port:
+              number: 5008
+        path: /(api|authenticate|logout)/(.+)
+        pathType: Prefix
