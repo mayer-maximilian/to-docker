@@ -1,3 +1,6 @@
+backup.txt
+db-test-deploy.yml
+
 # IDE
 .idea/
 .vs/
@@ -134,6 +137,9 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+frontend/node_modules
+
 # Other stuff
 *.tgz
 .DS_Store
+

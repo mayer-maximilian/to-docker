@@ -1,0 +1,74 @@
+---
+# Default deny all ingress and egress
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: default
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+---
+# Set ingress frontend pods
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: frontend-access
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      component: todo-frontend
+  ingress:
+  - from:
+      - namespaceSelector:
+          matchLabels:
+            name: ingress-nginx
+---
+# Set ingress and egress api pods
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: api-access
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      component: todo-api
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-nginx
+    ports:
+      - port: 5008
+  egress:
+    - {}
+  policyTypes:
+    - Egress
+    - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: redis-access
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      component: redis
+  ingress:
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: default
+        podSelector:
+          matchLabels:
+            component: todo-api
+  egress:
+    - {}
+  policyTypes:
+    - Egress
+    - Ingress
