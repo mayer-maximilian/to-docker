@@ -21,7 +21,6 @@ todo-frontend-1:
     - port: 5008
       targetPort: 5008
     type: ClusterIP
-
 todo-database-1:
   kubernetesClusterDomain: cluster.local
   postgres:
@@ -42,8 +41,8 @@ todo-database-1:
     pgdata: /var/lib/postgresql/data/todo-database/
     postgresDb: software-containerization
   todoDatabaseSecret:
-    postgresPassword: ""
-    postgresUser: ""
+    postgresPassword: EggsBenedict1!
+    postgresUser: postgres
 
 todo-api-1:
   kubernetesClusterDomain: cluster.local
