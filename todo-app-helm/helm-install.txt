@@ -1,0 +1,4 @@
+cd todo-app
+helm dependency update
+cd ..
+helm install todo-app --generate-name --debug #--dry-run
