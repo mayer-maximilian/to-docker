@@ -45,8 +45,7 @@ spec:
           value: test
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ .Values.kubernetesClusterDomain }}
-        image: {{ .Values.todoApiDeployment.todoApiContainer.image.repository }}:{{ .Values.todoApiDeployment.todoApiContainer.image.tag
-          | default .Chart.AppVersion }}
+        image: {{ .Values.todoApiDeployment.todoApiContainer.image.repository }}:{{ .Values.todoApiDeployment.todoApiContainer.image.tag | default .Chart.AppVersion }}
         imagePullPolicy: Always
         name: todo-api-container
         ports:
