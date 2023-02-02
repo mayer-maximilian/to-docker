@@ -1,7 +1,6 @@
-import axios from 'axios'
+import {post} from '@/utils/request'
 import jwt_decode from "jwt-decode";
 
-import getEnv from '@/utils/env';
 import {eventBus} from '@/main';
 import {getCookie, setCookie, deleteCookie} from '@/utils/cookies';
 
@@ -26,7 +25,7 @@ export async function userLogIn(username, password) {
         'headers': { "Content-Type": "multipart/form-data" }
     }
     let successful = true
-    await axios.post(`${!getEnv('ENV') ? 'http://localhost:5008' : ''}/authenticate`, data, headers)
+    await post(`authenticate`, data, headers)
         .then((response) => {
             console.log('yay')
             setCookie("jwt", response.data.access_token)

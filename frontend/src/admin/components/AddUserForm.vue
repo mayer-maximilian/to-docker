@@ -39,8 +39,7 @@
 </template>
 
 <script>
-import axios from 'axios'
-import getEnv from '@/utils/env'
+import {post} from '@/utils/request'
 
 export default {
     name: 'add-user-form',
@@ -62,7 +61,7 @@ export default {
             }
         },
         submitNewUser () {
-            axios.post(`${!getEnv('ENV') ? 'http://localhost:5008' : ''}/api/users/register`, this.user)
+            post(`api/users/register`, this.user)
             .then((response) => {
                 this.$emit('on-response', { response: response, 
                                             username: this.user.username, 

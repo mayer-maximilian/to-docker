@@ -11,9 +11,8 @@
 </template>
 
 <script>
-import axios from 'axios'
+import {get} from '@/utils/request'
 import {getCookie} from '@/utils/cookies'
-import getEnv from '@/utils/env'
 
 import UsersPage from './components/UsersPage.vue'
 
@@ -26,11 +25,7 @@ export default {
             this.$router.push({'name': 'login'})
             return
         }
-        console.log(`${!getEnv('ENV') ? 'http://localhost:5008' : ''}/check-login`);
-        axios.get(
-            `${!getEnv('ENV') ? 'http://localhost:5008' : ''}/check-login`,
-            {'headers': {'Authorization': `bearer ${jwt_token}`}}
-        )
+        get(`check-login`, {'headers': {'Authorization': `bearer ${jwt_token}`}})
         .then((response) => {
             if (response.status === 401) {
                 this.$router.push({'name': 'login'})

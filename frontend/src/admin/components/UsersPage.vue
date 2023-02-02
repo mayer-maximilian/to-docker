@@ -129,10 +129,9 @@
 </template>
 
 <script>
-import axios from 'axios'
+import {get, post} from '@/utils/request'
 import {getCookie} from '@/utils/cookies'
 import {getUser, userLogOff} from '@/utils/user'
-import getEnv from '@/utils/env'
 
 export default {
     name: 'users-page',
@@ -156,7 +155,7 @@ export default {
         getUsers () {
             let jwt_token = getCookie("jwt")
             if (jwt_token) {
-                axios.get(`${!getEnv('ENV') ? 'http://20.31.14.128/api' : ''}/users/get-users`, {'headers': {'Authorization': `bearer ${jwt_token}`}})
+                get(`api/users/get-users`, {'headers': {'Authorization': `bearer ${jwt_token}`}})
                 .then((response) => {
                     this.users = response.data.users
                 })
@@ -177,7 +176,7 @@ export default {
         },
         editItem () {
             let jwt_token = getCookie("jwt")
-            axios.post(`${!getEnv('ENV') ? 'http://20.31.14.128/api' : ''}/users/update-user`, this.editing_user, {'headers': {'Authorization': `bearer ${jwt_token}`}})
+            post(`api/users/update-user`, this.editing_user, {'headers': {'Authorization': `bearer ${jwt_token}`}})
             .then(() => {
                 if (this.editing_user.original_username !== this.editing_user.username) {
                     userLogOff()
@@ -198,7 +197,7 @@ export default {
             let data = new FormData()
             data.append('username', this.editing_user.username)
             data.append('password', this.editing_user.new_password)
-            axios.post(`${!getEnv('ENV') ? 'http://20.31.14.128/api' : ''}/users/change-password`, data, {'headers': {'Authorization': `bearer ${jwt_token}`}})
+            post(`api/users/change-password`, data, {'headers': {'Authorization': `bearer ${jwt_token}`}})
             .then(() => {
                 if (current_user === this.editing_user.username) {
                     userLogOff()
@@ -211,7 +210,7 @@ export default {
         },
         submitNewUser () {
             let jwt_token = getCookie("jwt")
-            axios.post(`${!getEnv('ENV') ? 'http://20.31.14.128/api' : ''}/users/add-user`, this.adding_user, {'headers': {'Authorization': `bearer ${jwt_token}`}})
+            post(`api/users/add-user`, this.adding_user, {'headers': {'Authorization': `bearer ${jwt_token}`}})
             .then(() => {
                 this.getUsers()
                 this.onReset()
@@ -219,7 +218,7 @@ export default {
         },
         deleteUser () {
             let jwt_token = getCookie("jwt")
-            axios.post(`${!getEnv('ENV') ? 'http://20.31.14.128/api' : ''}/users/delete-user?username=${this.editing_user.username}`, {}, {'headers': {'Authorization': `bearer ${jwt_token}`}})
+            post(`api/users/delete-user?username=${this.editing_user.username}`, {}, {'headers': {'Authorization': `bearer ${jwt_token}`}})
             .then(() => {
                 this.getUsers()
                 this.onReset()

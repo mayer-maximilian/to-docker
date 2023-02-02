@@ -55,7 +55,7 @@ export default {
             if (successful) {
                 await this.$router.push({name: 'home'})
             } else {
-                this.from.username = null
+                this.form.username = null
                 this.form.password = null
                 this.failed_login = this.failed_login_max
             }
