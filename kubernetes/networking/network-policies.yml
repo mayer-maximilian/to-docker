@@ -4,7 +4,7 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: default-deny-all
-  namespace: default
+  namespace: todo-app
 spec:
   podSelector: {}
   policyTypes:
@@ -16,11 +16,11 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: frontend-access
-  namespace: default
+  namespace: todo-app
 spec:
   podSelector:
     matchLabels:
-      component: todo-frontend
+      component: frontend
   ingress:
   - from:
       - namespaceSelector:
@@ -32,11 +32,11 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: api-access
-  namespace: default
+  namespace: todo-app
 spec:
   podSelector:
     matchLabels:
-      component: todo-api
+      component: api
   ingress:
   - from:
     - namespaceSelector:
@@ -44,10 +44,10 @@ spec:
           name: ingress-nginx
     - namespaceSelector:
         matchLabels:
-          name: default
+          name: todo-app
       podSelector:
         matchLabels:
-          component: todo-frontend
+          component: frontend
     ports:
       - port: 5008
   egress:
@@ -61,7 +61,7 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: redis-access
-  namespace: default
+  namespace: todo-app
 spec:
   podSelector:
     matchLabels:
@@ -70,10 +70,10 @@ spec:
     - from:
       - namespaceSelector:
           matchLabels:
-            name: default
+            name: todo-app
         podSelector:
           matchLabels:
-            component: todo-api
+            component: api
   egress:
     - {}
   policyTypes:

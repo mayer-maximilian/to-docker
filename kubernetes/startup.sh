@@ -1,21 +1,17 @@
 #! /bin/sh
 
-# ./scripts/build-api-container.sh
+microk8s kubectl apply -f ./config/namespace.yml
+microk8s kubectl apply -f ./config/config.yml
 
-# setup services for different pods to commuunicate with each other (we use service names, so this requires a DNS)
-microk8s kubectl apply -f ./services/services.yml
+#microk8s kubectl apply -f ./access-control/admin-role.yml
+#microk8s kubectl apply -f ./access-control/developer-role.yml
+#microk8s kubectl apply -f ./access-control/operator-role.yml
 
-# setup database, including the required persistant storage
-microk8s kubectl apply -f ./storage/database-storage.yml
-microk8s kubectl apply -f ./config/database-config.yml
 microk8s kubectl apply -f ./deployments/database-deployment.yml
-
-# setup api + components
 microk8s kubectl apply -f ./deployments/redis-deployment.yml
 microk8s kubectl apply -f ./deployments/api-deployment.yml
-
-# setup frontend and ingress
 microk8s kubectl apply -f ./deployments/frontend-deployment.yml
-microk8s kubectl apply -f ./ingresses/ingress.yml
 
-# microk8s kubectl get pods
+#microk8s kubectl apply -f ./networking/network-policies.yml
+microk8s kubectl apply -f ./networking/cluster-issuer.yml
+microk8s kubectl apply -f ./networking/ingress.yml

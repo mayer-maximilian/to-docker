@@ -3,10 +3,10 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 from urllib.parse import quote_plus
 from .utils import getenv
 
-# POSTGRES_HOST = getenv('POSTGRES_HOST', 'localhost')
-POSTGRES_HOST = getenv('POSTGRES_SERVICE_HOST', 'localhost')
-POSTGRES_USERNAME = getenv('POSTGRES_USERNAME', 'local')
-POSTGRES_PASSWORD = getenv('POSTGRES_PASSWORD', 'local')
+# POSTGRES_HOST = getenv('POSTGRES_SERVICE_SERVICE_HOST', 'localhost')
+POSTGRES_HOST = getenv('POSTGRES_HOST', 'localhost')
+POSTGRES_USERNAME = getenv('POSTGRES_USERNAME', 'local').strip()
+POSTGRES_PASSWORD = getenv('POSTGRES_PASSWORD', 'local').strip()
 
 Base = declarative_base()
 

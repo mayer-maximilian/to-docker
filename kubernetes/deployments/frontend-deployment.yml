@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: todo-frontend-service
-  namespace: default
+  name: frontend-service
+  namespace: todo-app
 spec:
   type: ClusterIP
   selector:
-    component: todo-frontend
+    component: frontend
   ports:
     - port: 80
       targetPort: 80
@@ -14,21 +14,21 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: todo-frontend-deployment
-  namespace: default
+  name: frontend-deployment
+  namespace: todo-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      component: todo-frontend
+      component: frontend
   template:
     metadata:
       labels:
-        component: todo-frontend
+        component: frontend
     spec:
       automountServiceAccountToken: false
       containers:
-        - name: todo-frontend-container
+        - name: frontend-container
           securityContext:
             privileged: false
             allowPrivilegeEscalation: false

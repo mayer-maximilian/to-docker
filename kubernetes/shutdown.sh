@@ -1,20 +1,18 @@
 #! /bin/sh
 
-# microk8s kubectl delete service todo-web-service
-microk8s kubectl delete ingress todo-ingress
-microk8s kubectl delete deployment todo-frontend-deployment
+microk8s kubectl delete -f ./networking/ingress.yml
 
-microk8s kubectl delete deployment todo-api-deployment
-microk8s kubectl delete deployment todo-redis-deployment
-microk8s kubectl delete deployment todo-database-deployment
+microk8s kubectl delete -f ./deployments/frontend-deployment.yml
+microk8s kubectl delete -f ./deployments/api-deployment.yml
+microk8s kubectl delete -f ./deployments/redis-deployment.yml
+microk8s kubectl delete -f ./deployments/database-deployment.yml
 
-microk8s kubectl delete pvc todo-database-pvc
-microk8s kubectl delete pv todo-database-data
+#microk8s kubectl delete -f ./access-control/operator-role.yml
+#microk8s kubectl delete -f ./access-control/developer-role.yml
+#microk8s kubectl delete -f ./access-control/admin-role.yml
 
-microk8s kubectl delete cm todo-database-config
-microk8s kubectl delete secret todo-database-secret
+microk8s kubectl delete -f ./networking/cluster-issuer.yml
+#microk8s kubectl delete -f ./networking/network-policies.yml
 
-microk8s kubectl delete service todo-frontend-service
-microk8s kubectl delete service todo-api-service
-microk8s kubectl delete service todo-redis-service
-microk8s kubectl delete service todo-database-service
+microk8s kubectl delete -f ./config/config.yml
+microk8s kubectl delete -f ./config/namespace.yml
