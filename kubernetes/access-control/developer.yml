@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: developer
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: developer-role
+  namespace: todo-app
+rules:
+- apiGroups: [""]
+  resources: ["Deployment", "Pod", "Service", "PV", "PVC", "ConfigMap", "Secret", "Ingress"]
+  verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: developer-binding
+  namespace: todo-app
+subjects:
+- kind: ServiceAccount
+  name: developer
+  apiGroup: ""
+roleRef:
+  kind: Role
+  name: developer-role
+  apiGroup: rbac.authorization.k8s.io
