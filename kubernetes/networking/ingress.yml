@@ -14,10 +14,10 @@ metadata:
 spec:
   tls:
     - hosts:
-      - eggsbenedict.westeurope.cloudapp.azure.com
+      - software-containerization-group15.westeurope.cloudapp.azure.com
       secretName: tls-secret
   rules:
-    - host: eggsbenedict.westeurope.cloudapp.azure.com
+    - host: software-containerization-group15.westeurope.cloudapp.azure.com
       http:
         paths:
           - path: /
