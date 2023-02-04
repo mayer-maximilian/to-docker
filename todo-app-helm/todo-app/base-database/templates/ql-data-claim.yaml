@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "base-database.fullname" . }}-ql-data-claim
+  labels:
+  {{- include "base-database.labels" . | nindent 4 }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.pvc.qlDataClaim.storageRequest | quote }}
+  storageClassName: {{ .Values.pvc.qlDataClaim.storageClass | quote }}

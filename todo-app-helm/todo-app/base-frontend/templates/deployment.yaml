@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "base-frontend.fullname" . }}-deployment
+  labels:
+  {{- include "base-frontend.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.deployment.replicas }}
+  selector:
+    matchLabels:
+      component: frontend
+    {{- include "base-frontend.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        component: frontend
+      {{- include "base-frontend.selectorLabels" . | nindent 8 }}
+    spec:
+      automountServiceAccountToken: false
+      containers:
+      - env:
+        - name: ENV
+          value: test
+        - name: KUBERNETES_CLUSTER_DOMAIN
+          value: {{ .Values.kubernetesClusterDomain }}
+        image: {{ .Values.deployment.frontendContainer.image.repository }}:{{ .Values.deployment.frontendContainer.image.tag | default .Chart.AppVersion }}
+        imagePullPolicy: Always
+        name: frontend-container
+        ports:
+        - containerPort: 80
+        resources: {{- toYaml .Values.deployment.frontendContainer.resources | nindent
+          10 }}
+        securityContext:
+          allowPrivilegeEscalation: false
+          privileged: false
+      nodeSelector:
+        type: application
+      tolerations:
+      - effect: NoSchedule
+        key: type
+        operator: Equal
+        value: application
