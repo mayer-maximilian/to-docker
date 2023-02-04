@@ -1,7 +1,5 @@
-kubernetesClusterDomain: cluster.local
-todoFrontendDeployment:
-  replicas: 1
-  todoFrontendContainer:
+deployment:
+  frontendContainer:
     image:
       repository: lucassctestregistry.azurecr.io/todo-frontend-image
       tag: v1
@@ -9,7 +7,9 @@ todoFrontendDeployment:
       limits:
         cpu: 100m
         memory: 250Mi
-todoFrontendService:
+  replicas: 1
+kubernetesClusterDomain: cluster.local
+service:
   ports:
   - port: 80
     targetPort: 80

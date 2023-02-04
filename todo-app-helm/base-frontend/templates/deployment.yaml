@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "base-frontend.fullname" . }}-todo-frontend-deployment
+  name: {{ include "base-frontend.fullname" . }}-deployment
   labels:
   {{- include "base-frontend.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.todoFrontendDeployment.replicas }}
+  replicas: {{ .Values.deployment.replicas }}
   selector:
     matchLabels:
-      component: todo-frontend
+      component: frontend
     {{- include "base-frontend.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        component: todo-frontend
+        component: frontend
       {{- include "base-frontend.selectorLabels" . | nindent 8 }}
     spec:
       automountServiceAccountToken: false
@@ -23,15 +23,13 @@ spec:
           value: test
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ .Values.kubernetesClusterDomain }}
-        image: {{ .Values.todoFrontendDeployment.todoFrontendContainer.image.repository
-          }}:{{ .Values.todoFrontendDeployment.todoFrontendContainer.image.tag | default
-          .Chart.AppVersion }}
+        image: {{ .Values.deployment.frontendContainer.image.repository }}:{{ .Values.deployment.frontendContainer.image.tag | default .Chart.AppVersion }}
         imagePullPolicy: Always
-        name: todo-frontend-container
+        name: frontend-container
         ports:
         - containerPort: 80
-        resources: {{- toYaml .Values.todoFrontendDeployment.todoFrontendContainer.resources
-          | nindent 10 }}
+        resources: {{- toYaml .Values.deployment.frontendContainer.resources | nindent
+          10 }}
         securityContext:
           allowPrivilegeEscalation: false
           privileged: false

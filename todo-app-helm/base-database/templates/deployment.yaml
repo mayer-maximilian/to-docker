@@ -1,11 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "base-database.fullname" . }}-postgres
+  name: {{ include "base-database.fullname" . }}-deployment
   labels:
   {{- include "base-database.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.postgres.replicas }}
+  replicas: {{ .Values.deployment.replicas }}
   selector:
     matchLabels:
       app: postgres
@@ -24,15 +24,15 @@ spec:
           valueFrom:
             secretKeyRef:
               key: username
-              name: {{ include "base-database.fullname" . }}-postgres
+              name: postgres
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
               key: password
-              name: {{ include "base-database.fullname" . }}-postgres
+              name: postgres
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ .Values.kubernetesClusterDomain }}
-        image: {{ .Values.postgres.postgres.image.repository }}:{{ .Values.postgres.postgres.image.tag | default .Chart.AppVersion }}
+        image: {{ .Values.deployment.postgres.image.repository }}:{{ .Values.deployment.postgres.image.tag | default .Chart.AppVersion }}
         imagePullPolicy: IfNotPresent
         name: postgres
         ports:
@@ -44,4 +44,4 @@ spec:
       volumes:
       - name: postgredb
         persistentVolumeClaim:
-          claimName: {{ include "base-database.fullname" . }}-postgresql-data-claim
+          claimName: {{ include "base-database.fullname" . }}-ql-data-claim

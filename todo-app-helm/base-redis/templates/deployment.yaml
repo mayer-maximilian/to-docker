@@ -21,8 +21,7 @@ spec:
       - env:
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ .Values.kubernetesClusterDomain }}
-        image: {{ .Values.deployment.redisClient.image.repository }}:{{ .Values.deployment.redisClient.image.tag
-          | default .Chart.AppVersion }}
+        image: {{ .Values.deployment.redisClient.image.repository }}:{{ .Values.deployment.redisClient.image.tag | default .Chart.AppVersion }}
         name: redis-client
         ports:
         - containerPort: 6379
