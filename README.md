@@ -1,4 +1,4 @@
-# Kubernetified Todo-App
+# Kubernetified Todo-App (Group 15)
 
 ## Table of Contents
 
@@ -12,7 +12,7 @@
 * [Demo](#demo)
 
 # About the Project
-This project was completed for the course Software Containerization 2023 at Vrije Universteit Amsterdam. It is our attempt at a super basic to-do list application designed to be be easily deployed by anyone using Kubernetes and the package manager Helm. Each component of the application (frontent, api, database, redis) can be deployed using kubernetes components, Docker images and containers in the scheme outlined below. Our implementation is designed to be deployed in an Microsoft Azure environment.
+This project was completed by group 15 for the course Software Containerization 2023 at Vrije Universteit Amsterdam. It is our attempt at a super basic to-do list application designed to be be easily deployed by anyone using Kubernetes and the package manager Helm. Each component of the application (frontent, api, database, redis) can be deployed using kubernetes components, Docker images and containers in the scheme outlined below. Our implementation is designed to be deployed in an Microsoft Azure environment.
 
 ## Important Note:
 While originally designed as a to-do list app, we later decided to reduce the scope of the project in order to focus on the deployment challenges. Consequently, only the API supports operations that would be required by a to-do list app, while the frontend is only interfacing with the user management component of the app.
