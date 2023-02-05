@@ -33,8 +33,6 @@ kubectl get all -n todo-app
 kubectl get pods -n todo-app
 kubectl scale deployment frontend-deployment --replicas=10 -n todo-app
 kubectl get pods -n todo-app
-kubectl scale deployment api-deployment --replicas=3 -n todo-app
-kubectl get pods -n todo-app
 
 # NOTE: UPDATE SOURCE CODE
 
@@ -71,5 +69,7 @@ kubectl delete deployment frontend-deployment -n todo-app
 kubectl get pods -n todo-app
 
 # uninstall using helm
+kubectl delete deployment frontend-canary-deployment -n todo-app
 helm uninstall todo-app -n todo-app
 helm list -n todo-app
+kubectl get all -n todo-app
