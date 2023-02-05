@@ -1,15 +1,15 @@
 dependencies:
 - name: base-api
-  repository: file:///Users/jerenolsen/documents/github/to-docker/todo-app-helm/base-api
+  repository: file://../base-api
   version: 0.1.0
 - name: base-database
-  repository: file:///Users/jerenolsen/documents/github/to-docker/todo-app-helm/base-database
+  repository: file://../base-database
   version: 0.1.0
 - name: base-frontend
-  repository: file:///Users/jerenolsen/documents/github/to-docker/todo-app-helm/base-frontend
+  repository: file://../base-frontend
   version: 0.1.0
 - name: base-redis
-  repository: file:///Users/jerenolsen/documents/github/to-docker/todo-app-helm/base-redis
+  repository: file://../base-redis
   version: 0.1.0
-digest: sha256:00feca198d50adbfd999dc6d0a9c581d8da9f7cfd9b39a9026d2b9efb48f313c
-generated: "2023-02-04T12:10:18.919056+01:00"
+digest: sha256:22a5609c3b58c419a55ff774dba12b40a8cb36ed9dcc8cbc57454f7ee1b5171a
+generated: "2023-02-05T13:09:28.710764835+01:00"
