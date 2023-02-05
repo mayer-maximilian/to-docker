@@ -1,52 +1,47 @@
-apiVersion: v1
-kind: ServiceAccount
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
 metadata:
-  name: operator
+  name: operator-read-role
+  namespace: todo-app
+rules:
+  - apiGroups: ["", "apps", "batch"]
+    resources: ["nodes", "services", "pods", "pods/log", "deployments", "replicasets", "statefulsets", "jobs", "cronjobs"]
+    verbs: ["get", "list", "watch"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: operator-read-only
+  name: operator-write-role
   namespace: todo-app
 rules:
-- apiGroups: [""]
-  resources: ["Service", "Pod"]
-  verbs: ["get", "watch", "list"]
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
-  name: operator-full-access
-  namespace: todo-app
-rules:
-- apiGroups: [""]
-  resources: ["Ingress", "ClusterIssuer",  "NetworkPolicy", "Secret", "ConfigMap", "Deployment"]
-  verbs: [""]
+  - apiGroups: ["", "apps", "batch"]
+    resources: ["deployments", "replicasets", "statefulsets", "jobs", "cronjobs"]
+    verbs: ["update", "patch"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: operator-read-only-binding
+  name: operator-read-role-binding
   namespace: todo-app
-subjects:
-- kind: ServiceAccount
-  name: operator
-  apiGroup: ""
 roleRef:
+  apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: operator-read--only
+  name: operator-read-role
+subjects:
+- kind: User
+  name: operator
   apiGroup: rbac.authorization.k8s.io
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: operator-full-access-binding
+  name: operator-write-role-binding
   namespace: todo-app
-subjects:
-- kind: ServiceAccount
-  name: operator
-  apiGroup: ""
 roleRef:
+  apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: operator-full-access
+  name: operator-write-role
+subjects:
+- kind: User
+  name: operator
   apiGroup: rbac.authorization.k8s.io
