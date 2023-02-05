@@ -9,6 +9,7 @@
 * [Helm](#helm)
 * [Horizontal Scaling](#horizontal-scaling)
 * [Update Rollout](#update-rollout)
+* [Demo](#demo)
 
 # About the Project
 This project was completed for the course Software Containerization 2023 at Vrije Universteit Amsterdam. It is our attempt at a super basic to-do list application designed to be be easily deployed by anyone using Kubernetes and the package manager Helm. Each component of the application (frontent, api, database, redis) can be deployed using kubernetes components, Docker images and containers in the scheme outlined below. Our implementation is designed to be deployed in an Microsoft Azure environment.
@@ -173,7 +174,97 @@ helm uninstall todo-app -n todo-app
 ```
 
 # Horizontal Scaling
+If you want to scale a deployed version of this application by increasing the amount of replicas deployed, this can easily be done. However, due to their stateful nature, this is not possible for the database and Redis. Instead, you can only scale the stateless components, including the API and the frontend. This can be done as follows:
 
+```bash
+# scaling the frontend to 10 replicas
+kubectl scale deployment frontend-deployment --replicas=10 -n todo-app
+
+# scaling the API to 19 replicas
+kubectl scale deployment api-deployment --replicas=10 -n todo-app
+```
+
+The use of a horizontal autoscaler is also possible:
+```bash
+# use an autoscaler to deploy between 1 and 10 frontend pods
+# depending on the CPU usage
+kubectl autoscale deployment frontend-deployment --cpu-percent=50 \
+                                                 --min=1 --max=10
+
+# use an autoscaler to deploy between 1 and 10 api pods
+# depending on the CPU usage
+kubectl autoscale deployment api-deployment --cpu-percent=50 \
+                                            --min=1 --max=10
+```
 
 # Update Rollout
+Rolling out updates is an important part of developing a cloud-native application. For this project, two options are available.
 
+## 1. Traditional Rollout
+Assuming some code was changed in the frontend. Then this change could be deployed as follows:
+```bash
+# create new frontend image and push it to registry
+cd frontend
+sudo docker build -t <your-registry>/todo-frontend-image:new-version .
+sudo docker push <your-registry>/todo-frontend-image:new-version
+cd ..
+
+# update image reference in deployment and record change in history
+kubectl set image deployment frontend-deployment \
+    frontend-container=<your-registry>/todo-frontend-image:new-version \
+    -n todo-app --record
+
+# review history
+kubectl rollout history deployment frontend-deployment -n todo-app
+```
+
+Similarly, the API code can be re-deployed after an update:
+```bash
+# create new frontend image and push it to registry
+cd backend
+sudo docker build -t <your-registry>/todo-api-image:new-version .
+sudo docker push <your-registry>/todo-api-image:new-version
+cd ..
+
+# update image reference in deployment and record change in history
+kubectl set image deployment api-deployment \
+    api-container=<your-registry>/todo-api-image:new-version \
+    -n todo-app --record
+
+# review history
+kubectl rollout history deployment api-deployment -n todo-app
+```
+
+Finally, if necessary, these rollouts can be reverted as follows:
+```bash
+# revert frontend rollout
+kubectl rollout undo deployment/frontend-deployment \
+    --revision <REVISION_NUMBER> -n todo-app
+
+# revert API rollout
+kubectl rollout undo deployment/api-deployment \
+    --revision <REVISION_NUMBER> -n todo-app
+```
+
+## 2. Canary Deployment
+Alternatively, you can perform a canary deployment. That means you update the deployment only partly, and only fully update, once the change was tested in practice. This is a very useful deployment strategy, and can be implemented as follows (for simplicity, we will limit this example to the frontend component):
+```bash
+# deployment file updating our frontend image version from v1 to v2
+kubectl apply -f ./kubernetes/deployments/frontend-canary-deployment.yml
+
+# scale updated deployment up to 3 replicas, and the original one down to 7
+# this means 30% of all traffic will receive the update
+kubectl scale deployment frontend-canary-deployment --replicas=3 -n todo-app
+kubectl scale deployment frontend-deployment --replicas=7 -n todo-app
+
+# IF UPDATE SUCCESSFULLY TESTED:
+# scale new deployment up to 10, meaning the full capacity
+kubectl scale deployment frontend-canary-deployment --replicas=10 -n todo-app
+# delete old deployment completely
+kubectl delete deployment frontend-deployment -n todo-app
+```
+
+> :warning: **Note on Helm Deployment:** If you perform this type of canary deployment on an instance of the application that was launched using Helm, don't forget that the "frontend-canary-deployment" is not part of the original Helm deployment and will not be deleted when you uninstall the Helm release. In that case, you will have to delete this deployment manually.
+
+# Demo
+For the submission of this project, we were required to perform a demo during a presentation. For the purpose of this demo, we used [doitlive](https://doitlive.readthedocs.io/en/stable/), a tool for scripted live demonstrations. The script used for this demo, including all the original commands, can be found [here](https://github.com/Xantocx/to-docker/blob/main/demo.sh). Feel free to check it out, and adapt it for yourself if necessary!
