@@ -13,9 +13,9 @@ This project was completed for the course Software Containerization 2023 at Vrij
 
 <!-- Contributors -->
 ## Contributors
-- [Lucas Lageweg]
-- [Maximilian Mayer]
-- [Jeren Olsen]
+- Lucas Lageweg
+- Maximilian Mayer
+- Jeren Olsen
 
 # Setup
 Before you can start, you need to install the Python requirements listed in `requirements.txt` using the command `pip install -r requirements.txt`.
