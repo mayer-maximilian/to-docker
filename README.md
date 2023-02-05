@@ -15,10 +15,10 @@
 This project was completed for the course Software Containerization 2023 at Vrije Universteit Amsterdam. It is our attempt at a super basic to-do list application designed to be be easily deployed by anyone using Kubernetes and the package manager Helm. Each component of the application (frontent, api, database, redis) can be deployed using kubernetes components, Docker images and containers in the scheme outlined below. Our implementation is designed to be deployed in an Microsoft Azure environment.
 
 ## Important Note:
-While oritinally designed as a to-do list app, we later decided to reduce the scope of the project in order to focus on the deploymend challenges. Consequently, only the API supports operations that would be required by a to-do list app, while the frontend is only interfacing with the user management component of the app.
+While originally designed as a to-do list app, we later decided to reduce the scope of the project in order to focus on the deployment challenges. Consequently, only the API supports operations that would be required by a to-do list app, while the frontend is only interfacing with the user management component of the app.
 
 ## Architecture
-![Component diagram of the containerized to-do app in this repository](https://github.com/Xantocx/to-docker/blob/main/misc/Blueprint.png)
+![Deployment diagram of the containerized to-do app in this repository](https://github.com/Xantocx/to-docker/blob/main/misc/Blueprint.png)
 
 <!-- Contributors -->
 ## Contributors
@@ -34,7 +34,7 @@ The application in this repository consists of 4 core elements:
 - PostgreSQL database (using default Docker image)
 - Redis as a session cache (using default Docker image)
 
-The frontend is hereby running hosted using a NGINX web server that serves the Vue.js application. The REST API handling frontend requests uses a uvicorn ASGI web server for Python, hosting the FastAPI backend. Both components will be hosted publically, as the client code for the frontend requires an exposed API.
+The frontend is hereby running hosted using a NGINX web server that serves the Vue.js application. The REST API handling frontend requests uses an uvicorn ASGI web server for Python, hosting the FastAPI backend. Both components will be hosted publically, as the client code for the frontend requires an exposed API.
 
 PostgreSQL and Redis are only accessible within the Kubernetes cluster they are deployed on, allowing the API component to persist data.
 
@@ -104,7 +104,7 @@ kubectl apply -f ./kubernetes/access-control/developer.yml
 kubectl apply -f ./kubernetes/access-control/operator.yml
 ```
 
-Now it is time for the most important resources: the deplyoments. For each of our 4 core components (frontent, api, database, and Redis) we have one deployment file. These files can be applied as follows:
+Now it is time for the most important resources: the deployments. For each of our 4 core components (frontend, api, database, and Redis) we have one deployment file. These files can be applied as follows:
 ```bash
 kubectl apply -f ./kubernetes/deployments/database-deployment.yml
 kubectl apply -f ./kubernetes/deployments/redis-deployment.yml
@@ -122,7 +122,7 @@ kubectl apply -f ./kubernetes/networking/network-policies.yml
 kubectl apply -f ./kubernetes/networking/ingress.yml
 ```
 
-> :warning: **Setup your own domain name!** Once again, we have provided the application as we deployed it on our own cluster. This means, the domain name we used to deploy the application is hardcoded in the [ingress resource](https://github.com/Xantocx/to-docker/blob/main/kubernetes/networking/ingress.yml). Make sure to update it, as we also request a TSL certificate for it (see below).
+> :warning: **Set up your own domain name!** Once again, we have provided the application as we deployed it on our own cluster. This means, the domain name we used to deploy the application is hardcoded in the [ingress resource](https://github.com/Xantocx/to-docker/blob/main/kubernetes/networking/ingress.yml). Make sure to update it, as we also request a TSL certificate for it (see below).
 
 > :warning: **Network Policies!** These network policies require a networking plugin that support them. We recommend [Calico](https://projectcalico.docs.tigera.io/getting-started/kubernetes/).
 
@@ -147,7 +147,7 @@ cd ../..
 ```
 
 # Helm
-The intended way of deploying the application is the Kubernetes package manager Helm. This allows to deploy many different resources all at once in a structured manner. For this project, we created the required [Helm chart](https://github.com/Xantocx/to-docker/tree/main/todo-app-helm/todo-app), and wrapped each of the four sub-components ([frontend](https://github.com/Xantocx/to-docker/tree/main/todo-app-helm/base-frontend), [API](https://github.com/Xantocx/to-docker/tree/main/todo-app-helm/base-api), [database](https://github.com/Xantocx/to-docker/tree/main/todo-app-helm/base-database), and [Redis](https://github.com/Xantocx/to-docker/tree/main/todo-app-helm/base-redis)) in their own charts, which we integrated as dependencies. However, before you can use them, you have to setup the following additional components:
+The intended way of deploying the application is the Kubernetes package manager Helm. This allows to deploy many resources all at once in a structured manner. For this project, we created the required [Helm chart](https://github.com/Xantocx/to-docker/tree/main/todo-app-helm/todo-app), and wrapped each of the four subcomponents ([frontend](https://github.com/Xantocx/to-docker/tree/main/todo-app-helm/base-frontend), [API](https://github.com/Xantocx/to-docker/tree/main/todo-app-helm/base-api), [database](https://github.com/Xantocx/to-docker/tree/main/todo-app-helm/base-database), and [Redis](https://github.com/Xantocx/to-docker/tree/main/todo-app-helm/base-redis)) in their own charts, which we integrated as dependencies. However, before you can use them, you have to set up the following additional components:
 
 - Updated image and domain names
 - Networking Plugin (such as Calico)
