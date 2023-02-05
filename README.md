@@ -1,5 +1,7 @@
-# to-docker
-A super basic to-do list application designed to be deployed with Docker, splitting the frontend, backend, and database in a seperate container each.
+# Kubernetified Todo-App
+A super basic to-do list application designed to be be easily deployed by anyone using Helm. Each component of the application (frontent, api, database, redis) are implemented using kubernetes components, docker images and containers in the scheme outlined below. Our implementation is deployed in an Azure environment.
+
+![alt text](https://github.com/Xantocx/to-docker/blob/main/misc/Blueprint.png)
 
 # Setup
 Before you can start, you need to install the Python requirements listed in `requirements.txt` using the command `pip install -r requirements.txt`.
