@@ -35,7 +35,7 @@ spec:
       automountServiceAccountToken: false
       containers:
         - name: api-container
-          image: lucassctestregistry.azurecr.io/todo-api-image:v1
+          image: lucassctestregistry.azurecr.io/todo-api-image:latest
           imagePullPolicy: Always
           securityContext:
             privileged: false
