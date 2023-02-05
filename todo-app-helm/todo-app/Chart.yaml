@@ -9,16 +9,16 @@ dependencies:
   - alias: todo-api-1
     name: base-api
     version: "0.1.0"
-    repository: file:///Users/jerenolsen/documents/github/to-docker/todo-app-helm/base-api
+    repository: file://../base-api
   - alias: todo-database-1
     name: base-database
     version: "0.1.0"
-    repository: file:///Users/jerenolsen/documents/github/to-docker/todo-app-helm/base-database
+    repository: file://../base-database
   - alias: todo-frontend-1
     name: base-frontend
     version: "0.1.0"
-    repository: file:///Users/jerenolsen/documents/github/to-docker/todo-app-helm/base-frontend
+    repository: file://../base-frontend
   - alias: todo-redis-1
     name: base-redis
     version: "0.1.0"
-    repository: file:///Users/jerenolsen/documents/github/to-docker/todo-app-helm/base-redis
+    repository: file://../base-redis
