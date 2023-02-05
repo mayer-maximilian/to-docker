@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ include "base-database.fullname" . }}-postgres
+  labels:
+  {{- include "base-database.labels" . | nindent 4 }}
+data:
+  password: {{ required "postgres.password is required" .Values.postgres.password
+    | b64enc | quote }}
+  username: {{ required "postgres.username is required" .Values.postgres.username
+    | b64enc | quote }}
+type: Opaque

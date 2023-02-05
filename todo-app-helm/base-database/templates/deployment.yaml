@@ -1,6 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: {{ .Release.Namespace }}
   name: {{ include "base-database.fullname" . }}-deployment
   labels:
   {{- include "base-database.labels" . | nindent 4 }}
@@ -24,12 +25,12 @@ spec:
           valueFrom:
             secretKeyRef:
               key: username
-              name: postgres
+              name: {{ include "base-database.fullname" . }}-postgres
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
               key: password
-              name: postgres
+              name: {{ include "base-database.fullname" . }}-postgres
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ .Values.kubernetesClusterDomain }}
         image: {{ .Values.deployment.postgres.image.repository }}:{{ .Values.deployment.postgres.image.tag | default .Chart.AppVersion }}

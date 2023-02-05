@@ -1,6 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: {{ .Release.Namespace }}
   name: {{ include "base-redis.fullname" . }}-deployment
   labels:
   {{- include "base-redis.labels" . | nindent 4 }}
