@@ -24,7 +24,15 @@ spec:
   - from:
       - namespaceSelector:
           matchLabels:
-            name: ingress-nginx
+            app.kubernetes.io/name: ingress-nginx
+  egress:
+  - to:
+      - namespaceSelector:
+          matchLabels:
+            name: todo-app
+        podSelector:
+          matchLabels:
+            component: api
 ---
 # Set ingress and egress api pods
 apiVersion: networking.k8s.io/v1
@@ -40,7 +48,7 @@ spec:
   - from:
     - namespaceSelector:
         matchLabels:
-          name: ingress-nginx
+          app.kubernetes.io/name: ingress-nginx
     - namespaceSelector:
         matchLabels:
           name: todo-app
@@ -50,10 +58,34 @@ spec:
     ports:
       - port: 5008
   egress:
-    - {}
-  policyTypes:
-    - Egress
-    - Ingress
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          name: todo-app
+      podSelector:
+        matchLabels:
+          app: postgres
+---
+# Set ingress and egress database pods
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: database-access
+  namespace: todo-app
+spec:
+  podSelector:
+    matchLabels:
+      app: database
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: todo-app
+      podSelector:
+        matchLabels:
+          component: api
+    ports:
+      - port: 5432
 ---
 # Only let the api reach redis
 apiVersion: networking.k8s.io/v1
@@ -73,8 +105,3 @@ spec:
         podSelector:
           matchLabels:
             component: api
-  egress:
-    - {}
-  policyTypes:
-    - Egress
-    - Ingress

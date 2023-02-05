@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "base-redis.fullname" . }}-service
+  name: redis-service
   labels:
     component: redis
   {{- include "base-redis.labels" . | nindent 4 }}

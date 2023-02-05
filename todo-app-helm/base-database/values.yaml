@@ -5,6 +5,9 @@ deployment:
       tag: "15.1"
   replicas: 1
 kubernetesClusterDomain: cluster.local
+postgres:
+  password: RWdnc0JlbmVkaWN0MSE=
+  username: cG9zdGdyZXM=
 pvc:
   qlDataClaim:
     storageClass: manual

@@ -1,7 +1,7 @@
 kubernetesClusterDomain: cluster.local
 
 # Values Api
-deployment:
+apiDeployment:
   apiContainer:
     image:
       repository: lucassctestregistry.azurecr.io/todo-api-image
@@ -14,12 +14,17 @@ deployment:
         cpu: 650m
         memory: 2000Mi
   replicas: 1
-kubernetesClusterDomain: cluster.local
-service:
+apiService:
   ports:
   - port: 5008
     targetPort: 5008
   type: ClusterIP
+jwtKey:
+  authKey: pindakaas #cGluZGFrYWFz #pindakaas
+kubernetesClusterDomain: cluster.local
+postgres:
+  password: Wdnc0JlbmVkaWN0MSE= # EggsBenedict1!
+  username: cG9zdGdyZXM= # postgres 
 
 #Values database
 deployment:
@@ -29,6 +34,9 @@ deployment:
       tag: "15.1"
   replicas: 1
 kubernetesClusterDomain: cluster.local
+postgres:
+  password: RWdnc0JlbmVkaWN0MSE=
+  username: cG9zdGdyZXM=
 pvc:
   qlDataClaim:
     storageClass: manual

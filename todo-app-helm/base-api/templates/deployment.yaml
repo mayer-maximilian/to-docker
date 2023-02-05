@@ -1,11 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "base-api.fullname" . }}-deployment
+  namespace: {{ .Release.Namespace }}
+  name: {{ include "base-api.fullname" . }}-api-deployment
   labels:
   {{- include "base-api.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.deployment.replicas }}
+  replicas: {{ .Values.apiDeployment.replicas }}
   selector:
     matchLabels:
       component: api
@@ -23,7 +24,7 @@ spec:
           valueFrom:
             secretKeyRef:
               key: auth_key
-              name: jwt-key
+              name: {{ include "base-api.fullname" . }}-jwt-key
         - name: REDIS_HOST
           value: redis-service
         - name: POSTGRES_HOST
@@ -32,22 +33,23 @@ spec:
           valueFrom:
             secretKeyRef:
               key: username
-              name: postgres
+              name: {{ include "base-api.fullname" . }}-postgres
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
               key: password
-              name: postgres
+              name: {{ include "base-api.fullname" . }}-postgres
         - name: ENV
           value: test
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ .Values.kubernetesClusterDomain }}
-        image: {{ .Values.deployment.apiContainer.image.repository }}:{{ .Values.deployment.apiContainer.image.tag | default .Chart.AppVersion }}
+        image: {{ .Values.apiDeployment.apiContainer.image.repository }}:{{ .Values.apiDeployment.apiContainer.image.tag | default .Chart.AppVersion }}
         imagePullPolicy: Always
         name: api-container
         ports:
         - containerPort: 5008
-        resources: {{- toYaml .Values.deployment.apiContainer.resources | nindent 10 }}
+        resources: {{- toYaml .Values.apiDeployment.apiContainer.resources | nindent 10
+          }}
         securityContext:
           allowPrivilegeEscalation: false
           privileged: false
