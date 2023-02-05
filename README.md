@@ -4,14 +4,14 @@
 
 * [About the Project](#about-the-project)
 * [Contributors](#contributors)
-* [Web Application](#Web Application)
-* [Azure Configuration](#Azure Configuration)
-* [Docker Components](#Docker Components)
-* [Kubernetes Components](#Kubernetes Components)
-* [Helm](#Helm)
-* [Setup](#Setup)
-* [Execution](#Execution)
-* [Scaling and Updating](#Scaling and Updating)
+* [Web Application](wWeb-application)
+* [Azure Configuration](#azure-configuration)
+* [Docker Components](#docker-components)
+* [Kubernetes Components](#kubernetes-components)
+* [Helm](#helm)
+* [Setup](#setup)
+* [Execution](#execution)
+* [Scaling and Updating](#scaling-and-updating)
 
 # About the Project
 This project was completed for the course Software Containerization 2023 at Vrije Universteit Amsterdam. It is A super basic to-do list application designed to be be easily deployed by anyone using Helm. Each component of the application (frontent, api, database, redis) are implemented using kubernetes components, docker images and containers in the scheme outlined below. Our implementation is deployed in an Azure environment.
