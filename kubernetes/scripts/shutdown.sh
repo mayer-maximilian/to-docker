@@ -12,7 +12,7 @@ microk8s kubectl delete -f ../access-control/developer.yml
 microk8s kubectl delete -f ../access-control/admin.yml
 
 # microk8s kubectl delete -f ../networking/cluster-issuer.yml
-#microk8s kubectl delete -f ../networking/network-policies.yml
+microk8s kubectl delete -f ../networking/network-policies.yml
 
 microk8s kubectl delete -f ../config/config.yml
 microk8s kubectl delete -f ../config/namespace.yml

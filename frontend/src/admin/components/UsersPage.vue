@@ -218,10 +218,16 @@ export default {
         },
         deleteUser () {
             let jwt_token = getCookie("jwt")
+            let current_user = getUser()
             post(`api/users/delete-user?username=${this.editing_user.username}`, {}, {'headers': {'Authorization': `bearer ${jwt_token}`}})
             .then(() => {
-                this.getUsers()
-                this.onReset()
+                if (current_user === this.editing_user.username) {
+                    userLogOff()
+                    this.$router.push({'name': 'login'})
+                } else {
+                    this.getUsers()
+                    this.onReset()
+                }
             })
         }
     },

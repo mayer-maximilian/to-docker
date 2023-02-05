@@ -12,6 +12,6 @@ microk8s kubectl apply -f ../deployments/redis-deployment.yml
 microk8s kubectl apply -f ../deployments/api-deployment.yml
 microk8s kubectl apply -f ../deployments/frontend-deployment.yml
 
-#microk8s kubectl apply -f ../networking/network-policies.yml
+microk8s kubectl apply -f ../networking/network-policies.yml
 # microk8s kubectl apply -f ../networking/cluster-issuer.yml
 microk8s kubectl apply -f ../networking/ingress.yml
