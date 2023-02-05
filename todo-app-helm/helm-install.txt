@@ -1,4 +1,4 @@
 cd todo-app
 helm dependency update
 cd ..
-helm install todo-app --namespace=todo-app --create-namespace --generate-name #--debug #--dry-run
+helm install our-todo-app todo-app  --namespace=todo-app --create-namespace
